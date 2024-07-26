@@ -74,8 +74,8 @@ int main () {
 
     setupWorld(world);
 
-    Entity* skele1 = addEntityToWorld(world, 5, 5);
-    setupSkeleton(skele1);
+    //Entity* skele1 = addEntityToWorld(world, 5, 5);
+    setupSkeleton(addEntityToWorld(world, 5, 5));
 
     printWorld(world);
 
