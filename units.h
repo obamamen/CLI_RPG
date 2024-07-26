@@ -15,9 +15,13 @@ typedef struct {
     int weight;
 } Item;
 
-
+typedef enum {
+    EMPTY,
+    PLAYER
+} EntityType;
 
 typedef struct {
+    int type;
     int xPos;
     int yPos;
     char icon; 

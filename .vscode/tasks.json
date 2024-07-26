@@ -4,26 +4,16 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "make",  
-            "args": ["all"],    
+            "command": "gcc",
+            "args": [
+                "-o", "my_program", "main.c", "ansi.c"  //al c files
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "problemMatcher": ["$gcc"],
-            "detail": "Build task using make"
-        },
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "make",
-            "args": ["clean"],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": [],
-            "detail": "Clean task using make"
+            "detail": "Compile and link C files using gcc"
         }
     ]
 }
