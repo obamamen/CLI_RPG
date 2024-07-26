@@ -23,6 +23,6 @@ void setupSkeleton(Entity* skeleton);
 
 void setupWorld(worldMap* map);
 void printWorld(const worldMap* map);
-void addEntityToWorld(Entity* Entity, worldMap* map)
+Entity* addEntityToWorld(worldMap* map, int x, int y);
 
 #endif // WORLD_H

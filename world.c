@@ -1,7 +1,11 @@
 #include "world.h"
 #include <stdio.h>
+#include <string.h>
 
 void makeEmptyEntity(Entity* entity) {
+    if (entity == NULL) {
+        return;
+    }
     entity->type = ENTITYTYPE_EMPTY;
     entity->xPos = 0;
     entity->yPos = 0;
@@ -15,6 +19,9 @@ void makeEmptyEntity(Entity* entity) {
 }
 
 void setupPlayer(Entity* player) {
+    if (player == NULL) {
+        return;
+    }
     player->type = ENTITYTYPE_PLAYER;
     player->xPos = 0;
     player->yPos = 0;
@@ -24,9 +31,10 @@ void setupPlayer(Entity* player) {
 }
 
 void setupSkeleton(Entity* skeleton) {
+    if (skeleton == NULL) {
+        return;
+    }
     skeleton->type = ENTITYTYPE_SKELETON;
-    skeleton->xPos = 5;
-    skeleton->yPos = 5;
     skeleton->icon = 's'; 
     skeleton->health = 50;
     skeleton->mana = 0; 
@@ -54,7 +62,10 @@ void printWorld(const worldMap* map) {
     for (int y = 0; y < map->height; ++y) {
         for (int x = 0; x < map->width; ++x) {
             if (map->EntitysMap[x][y] != NULL) {
-                printf("%c ", map->EntitysMap[x][y]->icon);
+                //printf("%c ", map->EntitysMap[x][y]->icon);
+                char ch[2] = { map->EntitysMap[x][y]->icon , '\0' };
+                printPlus(RESET, 0, GREEN, ch);
+                printf(" ");
             } else {
                 printf(". ");
             }
@@ -64,24 +75,23 @@ void printWorld(const worldMap* map) {
     printf("\n");
 }
 
-void addEntityToWorld(Entity* Entity, worldMap* map) {
-    int x = Entity->xPos;
-    int y = Entity->yPos;
+Entity* addEntityToWorld(worldMap* map, int x, int y) {
     if (x < 0 || x >= map->width || y < 0 || y >= map->height) {
         printf("Error: Position out of bounds.\n");
-        return;
+        return NULL;
     }
 
     if (map->EntitysMap[x][y] != NULL) {
         printf("Error: Position already occupied.\n");
-        return;
+        return NULL;
     }
 
     for (int i = 0; i < EntityListSize; ++i) {
-        if (map->EntityList[i] != NULL) {
-            memcpy(&map->EntityList[i], entity, sizeof(Entity));
-            map->EntitysMap[x][y] = &map->EntityList[i];
-            return;
+        if (map->EntityList[i].type == ENTITYTYPE_EMPTY) {
+            Entity* entity = &map->EntityList[i];
+            makeEmptyEntity(entity);
+            map->EntitysMap[x][y] = entity;
+            return entity;
         }
     }
 

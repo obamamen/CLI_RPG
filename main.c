@@ -73,7 +73,12 @@ int main () {
     }
 
     setupWorld(world);
+
+    Entity* skele1 = addEntityToWorld(world, 5, 5);
+    setupSkeleton(skele1);
+
     printWorld(world);
+
     while (1) {
         if (_kbhit()) {  
             char input = _getch();  
@@ -82,11 +87,7 @@ int main () {
             }
             system("cls");
             handleInput(input, world);
-  
             printWorld(world);
-
-            //printf("%c ", input);
-            //printPlus(RESET, 0, GREEN, "Hello World!");
         }
     }
 
