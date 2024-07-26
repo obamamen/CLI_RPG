@@ -23,12 +23,22 @@ void setupPlayer(Entity* player) {
     player->mana = 100; 
 }
 
+void setupSkeleton(Entity* skeleton) {
+    skeleton->type = ENTITYTYPE_SKELETON;
+    skeleton->xPos = 5;
+    skeleton->yPos = 5;
+    skeleton->icon = 's'; 
+    skeleton->health = 50;
+    skeleton->mana = 0; 
+}
+
 void setupWorld(worldMap* map) {
     int i, j;
     for (i = 0; i < EntityListSize; i++) {
         makeEmptyEntity(&map->EntityList[i]);
     }
     setupPlayer(&map->EntityList[0]);
+    map->Player = &map->EntityList[0];
 
     map->width = EntitysMapWidth;
     map->height = EntitysMapHeight;
@@ -37,11 +47,10 @@ void setupWorld(worldMap* map) {
             map->EntitysMap[i][j] = NULL;
         }
     }
-    map->EntitysMap[EntitysMapWidth / 2][EntitysMapHeight / 2] = &map->EntityList[0];
+    map->EntitysMap[0][0] = &map->EntityList[0];
 }
 
 void printWorld(const worldMap* map) {
-    printf("World Map:\n");
     for (int y = 0; y < map->height; ++y) {
         for (int x = 0; x < map->width; ++x) {
             if (map->EntitysMap[x][y] != NULL) {
@@ -53,4 +62,28 @@ void printWorld(const worldMap* map) {
         printf("\n");
     }
     printf("\n");
+}
+
+void addEntityToWorld(Entity* Entity, worldMap* map) {
+    int x = Entity->xPos;
+    int y = Entity->yPos;
+    if (x < 0 || x >= map->width || y < 0 || y >= map->height) {
+        printf("Error: Position out of bounds.\n");
+        return;
+    }
+
+    if (map->EntitysMap[x][y] != NULL) {
+        printf("Error: Position already occupied.\n");
+        return;
+    }
+
+    for (int i = 0; i < EntityListSize; ++i) {
+        if (map->EntityList[i] != NULL) {
+            memcpy(&map->EntityList[i], entity, sizeof(Entity));
+            map->EntitysMap[x][y] = &map->EntityList[i];
+            return;
+        }
+    }
+
+    printf("Error: No space in entityList.\n");
 }

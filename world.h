@@ -17,8 +17,12 @@ typedef struct {
 } worldMap;
 
 void makeEmptyEntity(Entity* entity);
+
 void setupPlayer(Entity* player);
+void setupSkeleton(Entity* skeleton);
+
 void setupWorld(worldMap* map);
 void printWorld(const worldMap* map);
+void addEntityToWorld(Entity* Entity, worldMap* map)
 
 #endif // WORLD_H

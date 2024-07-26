@@ -18,7 +18,8 @@ typedef struct {
 
 typedef enum {
     ENTITYTYPE_EMPTY,
-    ENTITYTYPE_PLAYER
+    ENTITYTYPE_PLAYER,
+    ENTITYTYPE_SKELETON
 } EntityType;
 
 typedef struct {
