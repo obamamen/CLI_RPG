@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include "units.h"
+#include "ansi.h"
+#include "world.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -19,8 +22,6 @@
             printf("Error getting console mode.\n");
             return;
         }
-
-        // Enable virtual terminal processing
         dwMode |= 0x0004;
         if (!SetConsoleMode(hConsole, dwMode)) {
             printf("Error setting console mode.\n");
@@ -28,8 +29,7 @@
     #endif
 }
 
-#include "units.h"
-#include "ansi.h"
+
 
 #define EntityListSize 1024
 #define EntitysMapWidth 32
@@ -55,15 +55,57 @@ void makeEmptyEntity(Entity* Entity) {
     }
 }
 
+void setupPlayer(Entity* Player) {
+    Player->type = ENTITYTYPE_PLAYER;
+    Player->xPos = 0;
+    Player->yPos = 0;
+    Player->icon = '@'; 
+    Player->health = 100;
+    Player->mana = 100; 
+}
+
 void setupWorld(worldMap* map) {
-    for (int i = 0; i < EntityListSize; i++) {
-        
+    int i,j;
+    for (i = 0; i < EntityListSize; i++) {
+        makeEmptyEntity(&map->EntityList[i]);
     }
+    setupPlayer(&map->EntityList[0]);
+
+    map->width = EntitysMapWidth;
+    map->height = EntitysMapHeight;
+    for (i = 0; i < EntitysMapWidth; ++i) {
+        for (j = 0; j < EntitysMapHeight; ++j) {
+            map->EntitysMap[i][j] = NULL;
+        }
+    }
+    map->EntitysMap[EntitysMapWidth/2][EntitysMapHeight/2] = &map->EntityList[0];
+}
+
+void printWorld(const worldMap* map) {
+    printf("World Map:\n");
+    for (int y = 0; y < map->height; ++y) {
+        for (int x = 0; x < map->width; ++x) {
+            if (map->EntitysMap[x][y] != NULL) {
+                printf("%c ", map->EntitysMap[x][y]->icon);
+            } else {
+                printf(". ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 int main () {
     enable_virtual_terminal_processing(); //otherwise no color in normal cmd
+    worldMap* world = (worldMap*)malloc(sizeof(worldMap));
+    if (world == NULL) {
+        printf("allocating memory for worldMap failed womp womp.\n");
+        return 1;
+    }
 
+    setupWorld(world);
+    printWorld(world);
     while (1) {
         if (_kbhit()) {  
             char input = _getch();  
@@ -72,9 +114,11 @@ int main () {
             }
             //system("cls");
             printf("%c ", input);
-            printPlus(RESET, 0, GREEN, "Hello world!\n");
+            printPlus(RESET, 0, GREEN, "Hello World!");
         }
     }
+
+    free(world);
     return 0;
 }
 
