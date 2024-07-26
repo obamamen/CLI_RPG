@@ -1,18 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>  // For _kbhit() and _getch() on Windows
+#include <conio.h>
 
+#include "units.h"
+#include "ansi.h"
 
-#define WORLD_WIDTH 50
-#define WORLD_HEIGHT 50
-#define VIEW_WIDTH 10
-#define VIEW_HEIGHT 10
-
-typedef struct {
-    int x;
-    int y;
-} Entity;
 
 int main () {
-
+    while (1) {
+        if (_kbhit()) {  
+            char input = _getch();  
+            if (input == 'q') {
+                break;
+            }
+            //system("cls");
+            printf("%c ", input);
+            printPlus(1, 1, 1, "hello");
+        }
+    }
+    return 0;
 }
+
