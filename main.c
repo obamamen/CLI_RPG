@@ -1,7 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-#include "windows.h"
+
+#ifdef _WIN32
+    #include <windows.h>
+    #endif
+
+    void enable_virtual_terminal_processing() {
+    #ifdef _WIN32
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (hConsole == INVALID_HANDLE_VALUE) {
+            printf("Error getting console handle.\n");
+            return;
+        }
+
+        DWORD dwMode = 0;
+        if (!GetConsoleMode(hConsole, &dwMode)) {
+            printf("Error getting console mode.\n");
+            return;
+        }
+
+        // Enable virtual terminal processing
+        dwMode |= 0x0004;
+        if (!SetConsoleMode(hConsole, dwMode)) {
+            printf("Error setting console mode.\n");
+        }
+    #endif
+}
 
 #include "units.h"
 #include "ansi.h"
@@ -18,8 +43,16 @@ typedef struct {
 }worldMap;
 
 void makeEmptyEntity(Entity* Entity) {
-    Entity->type = EMPTY;
+    Entity->type = ENTITYTYPE_EMPTY;
     Entity->xPos = 0;
+    Entity->yPos = 0;
+    Entity->icon = '.'; 
+    Entity->health = 0;
+    Entity->mana = 0; 
+    for (int i = 0; i < inventoryMaxSize; i++) {
+        Entity->inventory[i].type = ITEMTYPE_EMPTY;
+        Entity->inventory[i].type = 0;
+    }
 }
 
 void setupWorld(worldMap* map) {
@@ -29,6 +62,8 @@ void setupWorld(worldMap* map) {
 }
 
 int main () {
+    enable_virtual_terminal_processing(); //otherwise no color in normal cmd
+
     while (1) {
         if (_kbhit()) {  
             char input = _getch();  
@@ -37,7 +72,7 @@ int main () {
             }
             //system("cls");
             printf("%c ", input);
-            printPlus(RESET, 0, GREEN, "Hello world!");
+            printPlus(RESET, 0, GREEN, "Hello world!\n");
         }
     }
     return 0;

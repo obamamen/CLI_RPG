@@ -5,9 +5,10 @@
 #define inventoryMaxSize 256
 
 typedef enum {
-    SWORD_BASIC_METAL,
-    BOW_BASIC_WOODEN,
-    ARROW_BASIC
+    ITEMTYPE_EMPTY,
+    ITEMTYPE_SWORD_BASIC_METAL,
+    ITEMTYPE_BOW_BASIC_WOODEN,
+    ITEMTYPE_ARROW_BASIC
 } ItemType;
 
 typedef struct {
@@ -16,8 +17,8 @@ typedef struct {
 } Item;
 
 typedef enum {
-    EMPTY,
-    PLAYER
+    ENTITYTYPE_EMPTY,
+    ENTITYTYPE_PLAYER
 } EntityType;
 
 typedef struct {
@@ -28,7 +29,6 @@ typedef struct {
     int health; 
     int mana; 
     Item inventory[inventoryMaxSize];
-    int inventorySize; 
 } Entity;
 
 #endif // UNITS_H
