@@ -6,7 +6,6 @@ Welcome to **Arcane Assembler**! This is a command-line interface (CLI) based ga
 
 **Arcane Assembler** is an evolving project that aims to deliver an engaging CLI-based gaming experience. Although it's currently a work in progress, the game lays the groundwork for a rich fantasy experience with turn-based RPG mechanics and a focus on magic combat. Players will encounter various monsters, unlock powerful spells, and gather items to enhance their adventure.
 
-
 ![Project Screenshot Cursor](Showcase/ShowcaseImage1.png)
 
 ## Features
@@ -29,14 +28,13 @@ Welcome to **Arcane Assembler**! This is a command-line interface (CLI) based ga
   
 - [ ] **New Enemy Types**: Additional enemy types will be introduced to diversify gameplay. Each new enemy type will have unique attributes and behaviors, providing players with new challenges and encounters.
 
-
 ## Installation
 
 To get started with Arcane Assembler, you'll need a C compiler. Here’s how to set up the environment for different operating systems:
 
 1. **Unix-Based Systems (Linux, macOS)**:
    - You likely already have `gcc` or `clang` installed. These are standard compilers for C programming on Unix-based systems.
-   
+
 2. **Windows**:
    - You may need to install MinGW or another compatible compiler. MinGW provides a minimal development environment for native Microsoft Windows applications.
 
@@ -46,3 +44,9 @@ To get started with Arcane Assembler, you'll need a C compiler. Here’s how to 
 
    ```bash
    git clone https://github.com/obamamen/Arcane-Assembler-CLI-RPG-
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). See the [LICENSE.md](LICENSE.md) file for the full license text.
+
+The AGPL-3.0 license requires that any modified versions of this software, when used over a network, must also be distributed under the AGPL-3.0.
