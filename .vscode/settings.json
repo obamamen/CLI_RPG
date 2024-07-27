@@ -60,6 +60,7 @@
   "files.associations": {
     "windows.h": "c",
     "conio.h": "c",
-    "units.h": "c"
+    "units.h": "c",
+    "typeinfo": "c"
   }
 }

@@ -36,20 +36,6 @@ void set_code_page_utf8() {
 #endif
 }
 
-void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
-    int newX = entity->xPos + dx;
-    int newY = entity->yPos + dy;
-    if (newX < 0 || newX >= map->width || newY < 0 || newY >= map->height) {
-        return;
-    }
-    if (map->EntitysMap[newX][newY] != NULL) {
-        return;
-    }
-    map->EntitysMap[entity->xPos][entity->yPos] = NULL;
-    entity->xPos = newX;
-    entity->yPos = newY;
-    map->EntitysMap[newX][newY] = entity;
-}
 
 void handleMovementInput(char input, worldMap* world) {
     switch (input) {
@@ -93,8 +79,29 @@ void printEntity(Entity* entity) {
     if (entity == NULL) {
         return;
     }
-    printf("━");
-    printf("type: %s\n",entity->name);
+    printPlus(RESET, BLACK_BG, WHITE, " ╭━━━━━━━━═[ STATS ]═━━━━━━━━ \n");
+    printPlus(BOLD, BLACK_BG, WHITE, " ┃  > Type    :  ");
+    printPlus(RESET, BLACK_BG, WHITE,entity->name);
+    printPlus(RESET, BLACK_BG, WHITE,"\n");
+    printPlus(RESET, BLACK_BG, WHITE, " ┃  > Health  :  ");
+        char str[64];
+        snprintf(str, sizeof(str), "%d", entity->health);
+        printPlus(RESET, BLACK_BG, WHITE,str);
+        printPlus(RESET, BLACK_BG, WHITE," / ");
+        snprintf(str, sizeof(str), "%d", entity->maxHealth);
+        printPlus(RESET, BLACK_BG, WHITE,str);
+        printPlus(RESET, BLACK_BG, WHITE,"\n");
+    printPlus(RESET, BLACK_BG, WHITE, " ┃  > Mana    :  ");
+        snprintf(str, sizeof(str), "%d", entity->mana);
+        printPlus(RESET, BLACK_BG, WHITE,str);
+        printPlus(RESET, BLACK_BG, WHITE," / ");
+        snprintf(str, sizeof(str), "%d", entity->maxMana);
+        printPlus(RESET, BLACK_BG, WHITE,str);
+        printPlus(RESET, BLACK_BG, WHITE,"\n");
+    printPlus(RESET, BLACK_BG, WHITE, " ┃  > level   :  ");
+        snprintf(str, sizeof(str), "%d", entity->level);
+        printPlus(RESET, BLACK_BG, WHITE,str);
+        printPlus(RESET, BLACK_BG, WHITE,"\n");
 }
 
 typedef enum {
@@ -145,7 +152,8 @@ int main () {
                 cursorX = world->Player->xPos;
                 cursorY = world->Player->yPos;
                 printWorld(world, world->Player->xPos,world->Player->yPos);
-                printEntity(*world->EntitysMap[cursorX,cursorY]);
+                Entity* onCursor = world->EntitysMap[cursorX][cursorY];
+                printEntity(onCursor);
                 continue;
             }
             if ((input == 'e') && (ui==UI_CURSOR_STATE)) {

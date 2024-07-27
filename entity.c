@@ -4,6 +4,21 @@
 #include <string.h>
 #include "units.h"
 
+void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
+    int newX = entity->xPos + dx;
+    int newY = entity->yPos + dy;
+    if (newX < 0 || newX >= map->width || newY < 0 || newY >= map->height) {
+        return;
+    }
+    if (map->EntitysMap[newX][newY] != NULL) {
+        return;
+    }
+    map->EntitysMap[entity->xPos][entity->yPos] = NULL;
+    entity->xPos = newX;
+    entity->yPos = newY;
+    map->EntitysMap[newX][newY] = entity;
+}
+
 void setEntityName(Entity* entity, const char* name) {
     if (entity == NULL) {
         return;
@@ -28,6 +43,8 @@ void makeEmptyEntity(Entity* entity) {
     entity->mana = 0; 
     entity->maxHealth = 0;
     entity->maxMana = 0;
+    entity->level = 0;
+    entity->color = WHITE;
     setEntityName(entity,"Empty Entity");
     for (int i = 0; i < inventoryMaxSize; i++) {
         entity->inventory[i].type = ITEMTYPE_EMPTY;
@@ -42,10 +59,12 @@ void setupPlayer(Entity* player) {
     setEntityName(player,"Player");
     player->type = ENTITYTYPE_PLAYER;
     player->icon = '@'; 
-    player->health = 100;
-    player->maxHealth = 100;
+    player->health = 50;
+    player->maxHealth = 50;
     player->mana = 100; 
     player->maxMana= 100; 
+    player->level = 1;
+    player->color = GREEN;
 }
 
 void setupSkeleton(Entity* skeleton) {
@@ -59,4 +78,6 @@ void setupSkeleton(Entity* skeleton) {
     skeleton->maxHealth = 20;
     skeleton->mana = 0; 
     skeleton->maxMana= 0; 
+    skeleton->level = 1;
+    skeleton->color = RED;
 }

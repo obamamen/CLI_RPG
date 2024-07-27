@@ -1,6 +1,6 @@
 #ifndef UNITS_H
 #define UNITS_H
-
+#include "color.h"
 
 #define inventoryMaxSize 256
 
@@ -34,6 +34,7 @@ typedef struct {
     int level;
     char icon; 
     char name[64];
+    Color color;
     int health; 
     int maxHealth; 
     int mana; 
@@ -43,5 +44,6 @@ typedef struct {
     int xPos;
     int yPos;
 } Entity;
+
 
 #endif // UNITS_H

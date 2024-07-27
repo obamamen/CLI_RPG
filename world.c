@@ -23,25 +23,47 @@ void setupWorld(worldMap* map) {
 }
 
 void printWorld(worldMap* map, int cursorX, int cursorY) {
+    for (int line = 0; line < map->width+2; ++line) {
+        if (line == 0) {
+            printPlus(BOLD, BLACK_BG, WHITE, "╔═");
+            continue;
+        }
+        if (line == map->width+1) {
+            printPlus(BOLD, BLACK_BG, WHITE, "╗");
+            continue;
+        }
+        printPlus(BOLD, BLACK_BG, WHITE, "══");
+    }
+    printf("\n");
     for (int y = 0; y < map->height; ++y) {
-        printf("  ");
+        printPlus(BOLD, BLACK_BG, WHITE, "║ ");
         for (int x = 0; x < map->width; ++x) {
             int newX = x;
             int newY = y;
             if (x == cursorX && y == cursorY) {
-                printPlus(RESET, 0, YELLOW, "X ");
+                printPlus(BOLD, MAGENTA_BG, YELLOW, "X ");
             } else if (map->EntitysMap[newX][newY] != NULL) {
-                //printf("%c ", map->EntitysMap[x][y]->icon);
                 char ch[3] = { map->EntitysMap[newX][newY]->icon ,' ', '\0'};
-                printPlus(RESET, 0, GREEN, ch);
+                printPlus(RESET, 0, map->EntitysMap[newX][newY]->color, ch);
             } else {
-                printPlus(RESET, CYAN_BG, RED, "• ");
+                printPlus(RESET, BLACK_BG, WHITE, "· ");
             }
             if (x == (map->width-1)) {
-                printPlus(RESET, BLACK_BG, WHITE, " |");
+                printPlus(BOLD, BLACK_BG, WHITE, "║");
             }
         }
         printf("\n");
+    }
+    for (int line = 0; line < map->width+2; ++line) {
+        if (line == 0) {
+            printPlus(BOLD, BLACK_BG, WHITE, "╚═");
+            continue;
+        }
+        if (line == map->width+1) {
+            printPlus(BOLD, BLACK_BG, WHITE, "╝");
+            continue;
+        }
+        printPlus(BOLD, BLACK_BG, WHITE, "══");
     }
     printf("\n");
 }
