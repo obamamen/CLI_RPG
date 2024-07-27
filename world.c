@@ -2,44 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
-void makeEmptyEntity(Entity* entity) {
-    if (entity == NULL) {
-        return;
-    }
-    entity->type = ENTITYTYPE_EMPTY;
-    entity->xPos = 0;
-    entity->yPos = 0;
-    entity->icon = '.'; 
-    entity->health = 0;
-    entity->mana = 0; 
-    for (int i = 0; i < inventoryMaxSize; i++) {
-        entity->inventory[i].type = ITEMTYPE_EMPTY;
-        entity->inventory[i].type = 0;
-    }
-}
-
-void setupPlayer(Entity* player) {
-    if (player == NULL) {
-        return;
-    }
-    player->type = ENTITYTYPE_PLAYER;
-    player->xPos = 0;
-    player->yPos = 0;
-    player->icon = '@'; 
-    player->health = 100;
-    player->mana = 100; 
-}
-
-void setupSkeleton(Entity* skeleton) {
-    if (skeleton == NULL) {
-        return;
-    }
-    skeleton->type = ENTITYTYPE_SKELETON;
-    skeleton->icon = 's'; 
-    skeleton->health = 50;
-    skeleton->mana = 0; 
-}
+#include "entity.h"
 
 void setupWorld(worldMap* map) {
     int i, j;
@@ -61,6 +24,7 @@ void setupWorld(worldMap* map) {
 
 void printWorld(worldMap* map, int cursorX, int cursorY) {
     for (int y = 0; y < map->height; ++y) {
+        printf("  ");
         for (int x = 0; x < map->width; ++x) {
             int newX = x;
             int newY = y;
@@ -72,6 +36,9 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
                 printPlus(RESET, 0, GREEN, ch);
             } else {
                 printPlus(RESET, CYAN_BG, RED, "• ");
+            }
+            if (x == (map->width-1)) {
+                printPlus(RESET, BLACK_BG, WHITE, " |");
             }
         }
         printf("\n");

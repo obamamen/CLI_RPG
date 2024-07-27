@@ -31,12 +31,17 @@ typedef enum {
 
 typedef struct {
     int type;
+    int level;
+    char icon; 
+    char name[64];
+    int health; 
+    int maxHealth; 
+    int mana; 
+    int maxMana; 
+    Item inventory[inventoryMaxSize];
+
     int xPos;
     int yPos;
-    char icon; 
-    int health; 
-    int mana; 
-    Item inventory[inventoryMaxSize];
 } Entity;
 
 #endif // UNITS_H

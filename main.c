@@ -4,6 +4,7 @@
 #include "units.h"
 #include "ansi.h"
 #include "world.h"
+#include "entity.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -69,18 +70,39 @@ void handleMovementInput(char input, worldMap* world) {
     }
 }
 
+void handleCursorMovement(char input, int* cx, int* cy) {
+        switch (input) {
+        case 'w':
+            *cy-=1;
+            break;
+        case 's':
+            *cy+=1;
+            break;
+        case 'a':
+            *cx-=1;
+            break;
+        case 'd':
+            *cx+=1;
+            break;
+        default:
+            break;
+    }
+}
+
 void printEntity(Entity* entity) {
     if (entity == NULL) {
         return;
     }
-
-    printf("The integer is: %d\n",entity->health);
+    printf("━");
+    printf("type: %s\n",entity->name);
 }
 
 typedef enum {
     UI_PLAY_STATE,
-    UI_CURSOR_MODE
+    UI_CURSOR_STATE
 } UIstate;
+
+
 
 int main () {
     enable_virtual_terminal_processing(); //otherwise no color in normal cmd
@@ -94,22 +116,31 @@ int main () {
     setupSkeleton(addEntityToWorld(world, 5, 5));
     printWorld(world,-1,-1);
 
-    UIstate ui = UI_CURSOR_MODE;
+    UIstate ui = UI_PLAY_STATE;
     int cursorX = -1;
     int cursorY = -1;
-
-    void printCursorWorld(worldMap* map, int cursorX, int cursorY) {
-        printWorld(map,-1,-1);
-    }
 
     while (1) {
         if (_kbhit()) {  
             char input = _getch();  
+            if (input == 'v') {
+                printf("state = %d",ui);
+                printf("x = %d",cursorX);
+                printf("y = %d",cursorY);
+                continue;
+            }
             if (input == 'q') {
                 break;
             }
+            if (ui==UI_CURSOR_STATE) {
+                system("cls");
+                handleCursorMovement(input, &cursorX, &cursorY);
+                printWorld(world, cursorX, cursorY);
+                Entity* onCursor = world->EntitysMap[cursorX][cursorY];
+                printEntity(onCursor);
+            }
             if ((input == 'e') && (ui==UI_PLAY_STATE)) {
-                ui = UI_CURSOR_MODE;
+                ui = UI_CURSOR_STATE;
                 system("cls");
                 cursorX = world->Player->xPos;
                 cursorY = world->Player->yPos;
@@ -117,8 +148,10 @@ int main () {
                 printEntity(*world->EntitysMap[cursorX,cursorY]);
                 continue;
             }
-            if ((input == 'e') && (ui==UI_CURSOR_MODE)) {
+            if ((input == 'e') && (ui==UI_CURSOR_STATE)) {
                 ui = UI_PLAY_STATE;
+                cursorX = -1;
+                cursorY = -1;
                 system("cls");
                 printWorld(world, -1, -1);
                 continue;
@@ -127,7 +160,6 @@ int main () {
                 system("cls");
                 handleMovementInput(input, world);
                 printWorld(world,-1,-1);
-                continue;
             }
             //printf("b: Enemies @  #  X  O  M  &   ☠  ☻  ▒ Cursor >  <  ^  v  *  +  o  .  ←  →  ↑  ↓ UI Elements *  +  -  |  =  .  :  ;  #  √  × +  -  |  ┼  ─  │  ┌  ┐  └  ┘  ╭  ╮  ╰  ╯  ╲  ╱  ╳  ╋  ┃  ━\n"); 
         }
