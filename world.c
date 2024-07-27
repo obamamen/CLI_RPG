@@ -1,6 +1,7 @@
 #include "world.h"
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 void makeEmptyEntity(Entity* entity) {
     if (entity == NULL) {
@@ -58,16 +59,19 @@ void setupWorld(worldMap* map) {
     map->EntitysMap[0][0] = &map->EntityList[0];
 }
 
-void printWorld(const worldMap* map) {
+void printWorld(worldMap* map, int cursorX, int cursorY) {
     for (int y = 0; y < map->height; ++y) {
         for (int x = 0; x < map->width; ++x) {
-            if (map->EntitysMap[x][y] != NULL) {
+            int newX = x;
+            int newY = y;
+            if (x == cursorX && y == cursorY) {
+                printPlus(RESET, 0, YELLOW, "X ");
+            } else if (map->EntitysMap[newX][newY] != NULL) {
                 //printf("%c ", map->EntitysMap[x][y]->icon);
-                char ch[2] = { map->EntitysMap[x][y]->icon , '\0' };
+                char ch[3] = { map->EntitysMap[newX][newY]->icon ,' ', '\0'};
                 printPlus(RESET, 0, GREEN, ch);
-                printf(" ");
             } else {
-                printf(". ");
+                printPlus(RESET, CYAN_BG, RED, "• ");
             }
         }
         printf("\n");

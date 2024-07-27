@@ -47,6 +47,7 @@ void printPlus(TextAttribute attr, Color fg, Color bg, const char *text) {
         get_color_code(fg),       // Foreground color
         get_color_code(bg),       // Background color
         text,                     // Text to print
-        get_attribute_code(RESET) // Reset to default
+        get_attribute_code(RESET), // Reset to default
+        '\0'
     );
 }

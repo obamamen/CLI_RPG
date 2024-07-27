@@ -22,7 +22,7 @@ void setupPlayer(Entity* player);
 void setupSkeleton(Entity* skeleton);
 
 void setupWorld(worldMap* map);
-void printWorld(const worldMap* map);
+void printWorld(worldMap* map, int cursorX, int cursorY);
 Entity* addEntityToWorld(worldMap* map, int x, int y);
 
 #endif // WORLD_H

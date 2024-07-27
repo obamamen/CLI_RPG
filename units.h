@@ -11,8 +11,15 @@ typedef enum {
     ITEMTYPE_ARROW_BASIC
 } ItemType;
 
+typedef enum {
+    ITEMCOLLECTION_EMPTY,
+    ITEMCOLLECTION_WEAPON,
+    ITEMCOLLECTION_ARMORPIECE,
+} ItemCollection;
+
 typedef struct {
     ItemType type;
+    ItemCollection collection;
     int weight;
 } Item;
 
