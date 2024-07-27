@@ -47,6 +47,6 @@ To get started with Arcane Assembler, you'll need a C compiler. Here’s how to 
 
 ## License
 
-This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). See the [LICENSE.md](LICENSE.md) file for the full license text.
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). See the [LICENSE.md](license/license.md) [LICENSE.txt](license/license.txt) file for the full license text.
 
 The AGPL-3.0 license requires that any modified versions of this software, when used over a network, must also be distributed under the AGPL-3.0.
