@@ -14,8 +14,15 @@ typedef struct {
     Entity* Player;
     int width;
     int height;
+    int cameraX;
+    int cameraY;
+    int cameraWidth;
+    int cameraHeight;
 } worldMap;
 
+
+void updateMap(worldMap* map);
+void clampCamera(worldMap* map);
 void makeEmptyEntity(Entity* entity);
 
 void setupPlayer(Entity* player);
