@@ -124,7 +124,7 @@ int main () {
     printWorld(world,-1,-1);
     printPlus(RESET, GREEN_BOLD, GREEN_HI, "Hello, World with RED_HI foreground and CYAN_BG!\n");
     printPlus(RESET, GREEN, CYAN_BG,"Hello, World with RED foreground and CYAN_BG!\n");
-    printPlus(RESET, GREEN_HI, RED_BG, "Hello, World with RED_HI foreground and CYAN_BG in REVERSE!\n");
+    printPlus(RESET, WHITE, BLACK_HI_BG, "Hello, World with RED_HI foreground and CYAN_BG in REVERSE!\n");
     UIstate ui = UI_PLAY_STATE;
     int cursorX = -1;
     int cursorY = -1;
