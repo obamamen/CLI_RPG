@@ -54,6 +54,7 @@ void makeEmptyEntity(Entity* entity) {
             entity->inventory[i].enchantments[j] = ENCHANTMENT_EMPTY;
         }
         entity->inventory[i].spell = SPELL_EMPTY;
+        entity->inventory[i].manaCost = 0;
         entity->inventory[i].stack = 0;
         entity->inventory[i].maxStack = 0;
         entity->inventory[i].weight = 0;

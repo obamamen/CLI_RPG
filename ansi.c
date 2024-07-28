@@ -74,11 +74,25 @@ const char* get_color_code(Color color) {
 }
 
 void printPlus(TextAttribute attr, Color fg, Color bg, const char *text) {
-    printf("%s%s%s%s%s", 
-        get_attribute_code(attr),   
-        get_color_code(fg),         
-        get_color_code(bg),         
-        text,                       
-        get_attribute_code(RESET)   
-    );
+    int reset = 0;
+    if (reset == 1) { 
+        printf("%s%s%s%s%s", 
+            get_attribute_code(attr),   
+            get_color_code(fg),         
+            get_color_code(bg),         
+            text,                       
+            get_attribute_code(RESET)   
+        );
+    }
+    if (reset == 0) { 
+        printf("%s%s%s%s", 
+            get_attribute_code(attr),   
+            get_color_code(fg),         
+            get_color_code(bg),         
+            text                      
+        );
+    }
 }
+
+
+

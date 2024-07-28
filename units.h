@@ -8,7 +8,7 @@
 
 typedef enum {
     ITEMNAME_EMPTY
-} ItemName
+} ItemName;
 
 
 typedef enum {
@@ -41,6 +41,7 @@ typedef struct {
     ItemCollection collection;
     Enchantment enchantments[EnchantmentsMaxSize];
     Spell spell;
+    int manaCost;
     int stack;
     int maxStack;
     int weight;
