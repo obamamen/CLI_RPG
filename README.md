@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/9843834f-1b80-4b5a-97b2-3bd91aa641ab
 
 ## Features
 
-- **Cursor**: The image above shows the game cursor, represented by an "X". When you press the 'e' key, the game switches to cursor mode. In this mode, instead of moving the player character, you control a cursor. The cursor can be moved around the game world, and when it hovers over an entity (such as a monster or item), detailed statistics about that entity are displayed. This feature is particularly useful for examining the attributes of entities without directly interacting with them.
+- **Cursor**: The video and image above shows the game cursor, represented by an "X". When you press the 'e' key, the game switches to cursor mode. In this mode, instead of moving the player character, you control a cursor. The cursor can be moved around the game world, and when it hovers over an entity (such as a monster or item), detailed statistics about that entity are displayed. This feature is particularly useful for examining the attributes of entities without directly interacting with them.
   
 - **Movement**: The game currently supports basic movement functionality. Players can navigate through a 2D grid-based game world. The controls are designed to be intuitive, allowing you to move up, down, left, or right within the game environment.
   

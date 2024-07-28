@@ -20,7 +20,7 @@ typedef struct {
     int cameraHeight;
 } worldMap;
 
-
+void createEmptyItem(Item* item);
 void updateMap(worldMap* map);
 void clampCamera(worldMap* map);
 void makeEmptyEntity(Entity* entity);

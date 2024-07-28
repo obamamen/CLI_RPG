@@ -45,10 +45,18 @@ void makeEmptyEntity(Entity* entity) {
     entity->maxMana = 0;
     entity->level = 0;
     entity->color = WHITE;
-    setEntityName(entity,"Empty Entity");
-    for (int i = 0; i < inventoryMaxSize; i++) {
+    setEntityName(entity,"");
+    for (int i = 0; i < InventoryMaxSize; i++) {
         entity->inventory[i].type = ITEMTYPE_EMPTY;
-        entity->inventory[i].type = 0;
+        entity->inventory[i].name = ITEMNAME_EMPTY;
+        entity->inventory[i].collection = ITEMCOLLECTION_EMPTY;
+        for (int j = 0; j < EnchantmentsMaxSize; j++) {
+            entity->inventory[i].enchantments[j] = ENCHANTMENT_EMPTY;
+        }
+        entity->inventory[i].spell = SPELL_EMPTY;
+        entity->inventory[i].stack = 0;
+        entity->inventory[i].maxStack = 0;
+        entity->inventory[i].weight = 0;
     }
 }
 

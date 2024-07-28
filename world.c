@@ -4,6 +4,10 @@
 #include <math.h>
 #include "entity.h"
 
+void createEmptyItem(Item* item){
+    
+}
+
 void clampCamera(worldMap* map) {
     if (map->cameraX < 0) {
         map->cameraX = 0;
