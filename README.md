@@ -8,6 +8,10 @@ Welcome to **Arcane Assembler**! This is a command-line interface (CLI) based ga
 
 ![Project Screenshot Cursor](Showcase/ShowcaseImage1.png)
 
+https://github.com/user-attachments/assets/9843834f-1b80-4b5a-97b2-3bd91aa641ab
+
+
+
 ## Features
 
 - **Cursor**: The image above shows the game cursor, represented by an "X". When you press the 'e' key, the game switches to cursor mode. In this mode, instead of moving the player character, you control a cursor. The cursor can be moved around the game world, and when it hovers over an entity (such as a monster or item), detailed statistics about that entity are displayed. This feature is particularly useful for examining the attributes of entities without directly interacting with them.
