@@ -5,6 +5,14 @@
 #include "ansi.h"
 #include "world.h"
 #include "entity.h"
+#include <time.h>
+
+void waitMs(int milliseconds) {
+    struct timespec ts;
+    ts.tv_sec = milliseconds / 1000;
+    ts.tv_nsec = (milliseconds % 1000) * 1000000; 
+    nanosleep(&ts, NULL);
+}
 
 #ifdef _WIN32
     #include <windows.h>
@@ -148,6 +156,7 @@ int main () {
                 system("cls");
                 handleCursorMovement(input, &cursorX, &cursorY);
                 printWorld(world, cursorX, cursorY);
+                waitMs(25);
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
             }
@@ -157,6 +166,7 @@ int main () {
                 cursorX = world->Player->xPos;
                 cursorY = world->Player->yPos;
                 printWorld(world, world->Player->xPos,world->Player->yPos);
+                waitMs(25);
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
                 continue;
@@ -167,6 +177,7 @@ int main () {
                 cursorY = -1;
                 system("cls");
                 printWorld(world, -1, -1);
+                waitMs(25);
                 continue;
             }
             if (ui==UI_PLAY_STATE) {
@@ -174,6 +185,7 @@ int main () {
                 handleMovementInput(input, world);
                 updateMap(world); 
                 printWorld(world,-1,-1);
+                waitMs(25);
             }
             //printf("b: Enemies @  #  X  O  M  &   ☠  ☻  ▒ Cursor >  <  ^  v  *  +  o  .  ←  →  ↑  ↓ UI Elements *  +  -  |  =  .  :  ;  #  √  × +  -  |  ┼  ─  │  ┌  ┐  └  ┘  ╭  ╮  ╰  ╯  ╲  ╱  ╳  ╋  ┃  ━\n"); 
         }

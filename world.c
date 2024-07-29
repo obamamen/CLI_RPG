@@ -138,7 +138,7 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
     }
     appendToBuffer(buffer, &bufferPos, "\n");
 
-    // Print the entire buffer
+
     printf("%s", buffer);
 }
 
