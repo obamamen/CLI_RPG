@@ -5,8 +5,8 @@
 #include "ansi.h"
 
 #define EntityListSize 256
-#define EntitysMapWidth 32
-#define EntitysMapHeight 32
+#define EntitysMapWidth 64
+#define EntitysMapHeight 64
 
 typedef struct {
     Entity EntityList[EntityListSize];

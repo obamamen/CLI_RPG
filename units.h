@@ -6,6 +6,11 @@
 #define EnchantmentsMaxSize 4
 #define MaxStackSize
 
+typedef struct {
+    int x;
+    int y;
+} pos;
+
 
 typedef enum {
     ITEMNAME_EMPTY

@@ -42,8 +42,8 @@ void setupWorld(worldMap* map) {
     map->EntitysMap[0][0] = &map->EntityList[0];
     map->cameraX = 0;
     map->cameraY = 0;
-    map->cameraWidth = 11;
-    map->cameraHeight = 11;
+    map->cameraWidth = 45;
+    map->cameraHeight = 25;
 }
 
 void updateMap(worldMap* map) {
@@ -64,27 +64,8 @@ void updateMap(worldMap* map) {
     clampCamera(map);
 }
 
-void appendToBuffer(char* buffer, int* bufferPos, const char* text) {
-    int len = strlen(text);
-    if (*bufferPos + len < 20000) {
-        strcpy(buffer + *bufferPos, text);
-        *bufferPos += len;
-    } else {
-        fprintf(stderr, "Buffer overflow detected\n");
-    }
-}
-
-// Print function with simplified logic
-void printPlusAppendToBuffer(TextAttribute attr, Color fg, Color bg, const char *text, char* buffer, int* bufferPos) {
-    appendToBuffer(buffer, bufferPos, get_attribute_code(attr));    // Text attribute code
-    appendToBuffer(buffer, bufferPos, get_color_code(fg));          // Foreground color code
-    appendToBuffer(buffer, bufferPos, get_color_code(bg));          // Background color code
-    appendToBuffer(buffer, bufferPos, text);     
-    appendToBuffer(buffer, bufferPos, get_color_code(RESET));       // The text to print
-}
-
 void printWorld(worldMap* map, int cursorX, int cursorY) {
-    char buffer[20000];
+    char buffer[40000];
     int bufferPos = 0;
 
     // Top border

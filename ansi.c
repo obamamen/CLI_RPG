@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <string.h>
 #include "ansi.h"
+
 
 static const char* attribute_codes[] = {
     "\033[0m",  // RESET
@@ -71,6 +73,25 @@ const char* get_color_code(Color color) {
         return "";
     }
     return color_codes[color];
+}
+
+void appendToBuffer(char* buffer, int* bufferPos, const char* text) {
+    int len = strlen(text);
+    if (*bufferPos + len < 40000) {
+        strcpy(buffer + *bufferPos, text);
+        *bufferPos += len;
+    } else {
+        fprintf(stderr, "Buffer overflow detected\n");
+    }
+}
+
+// Print function with simplified logic
+void printPlusAppendToBuffer(TextAttribute attr, Color fg, Color bg, const char *text, char* buffer, int* bufferPos) {
+    appendToBuffer(buffer, bufferPos, get_attribute_code(attr));    // Text attribute code
+    appendToBuffer(buffer, bufferPos, get_color_code(fg));          // Foreground color code
+    appendToBuffer(buffer, bufferPos, get_color_code(bg));          // Background color code
+    appendToBuffer(buffer, bufferPos, text);     
+    appendToBuffer(buffer, bufferPos, get_color_code(RESET));       // The text to print
 }
 
 void printPlus(TextAttribute attr, Color fg, Color bg, const char *text) {

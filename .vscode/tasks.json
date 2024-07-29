@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "-o", "my_program", "main.c", "ansi.c", "world.c", "entity.c"  //al c files
+                "-o", "my_program", "main.c", "ansi.c", "world.c", "entity.c", "ui.c"  //al c files
             ],
             "group": {
                 "kind": "build",
