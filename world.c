@@ -64,56 +64,84 @@ void updateMap(worldMap* map) {
     clampCamera(map);
 }
 
-void printWorld(worldMap* map, int cursorX, int cursorY) {
-    for (int line = 0; line < map->cameraWidth+2; ++line) {
-        if (line == 0) {
-            printPlus(BOLD, BLACK_BG, WHITE, "╔═");
-            continue;
-        }
-        if (line == map->cameraWidth+1) {
-            printPlus(BOLD, BLACK_BG, WHITE, "╗");
-            continue;
-        }
-        printPlus(BOLD, BLACK_BG, WHITE, "══");
+void appendToBuffer(char* buffer, int* bufferPos, const char* text) {
+    int len = strlen(text);
+    if (*bufferPos + len < 20000) {
+        strcpy(buffer + *bufferPos, text);
+        *bufferPos += len;
+    } else {
+        fprintf(stderr, "Buffer overflow detected\n");
     }
-    printf("\n");
+}
+
+// Print function with simplified logic
+void printPlusAppendToBuffer(TextAttribute attr, Color fg, Color bg, const char *text, char* buffer, int* bufferPos) {
+    appendToBuffer(buffer, bufferPos, get_attribute_code(attr));    // Text attribute code
+    appendToBuffer(buffer, bufferPos, get_color_code(fg));          // Foreground color code
+    appendToBuffer(buffer, bufferPos, get_color_code(bg));          // Background color code
+    appendToBuffer(buffer, bufferPos, text);     
+    appendToBuffer(buffer, bufferPos, get_color_code(RESET));       // The text to print
+}
+
+void printWorld(worldMap* map, int cursorX, int cursorY) {
+    char buffer[20000];
+    int bufferPos = 0;
+
+    // Top border
+    for (int line = 0; line < map->cameraWidth + 2; ++line) {
+        if (line == 0) {
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "╔═", buffer, &bufferPos);
+        } else if (line == map->cameraWidth + 1) {
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "╗", buffer, &bufferPos);
+        } else {
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "══", buffer, &bufferPos);
+        }
+    }
+    appendToBuffer(buffer, &bufferPos, "\n");
+
+    // Map content
     for (int y = 0; y < map->cameraHeight; ++y) {
-        printPlus(BOLD, BLACK_BG, WHITE, "║ ");
+        printPlusAppendToBuffer(BOLD, BLACK, WHITE, "║ ", buffer, &bufferPos);
         for (int x = 0; x < map->cameraWidth; ++x) {
-            int newX = x+map->cameraX;
-            int newY = y+map->cameraY;
+            int newX = x + map->cameraX;
+            int newY = y + map->cameraY;
             if (newX == cursorX && newY == cursorY) {
-                printPlus(BOLD, MAGENTA_BG, YELLOW, "X ");
+                printPlusAppendToBuffer(BOLD, MAGENTA_BG, YELLOW, "X ", buffer, &bufferPos);
             } else if (map->EntitysMap[newX][newY] != NULL) {
-                char ch[3] = { map->EntitysMap[newX][newY]->icon ,' ', '\0'};
-                printPlus(RESET, 0, map->EntitysMap[newX][newY]->color, ch);
+                char ch[4];
+                snprintf(ch, sizeof(ch), "%c ", map->EntitysMap[newX][newY]->icon);
+                printPlusAppendToBuffer(RESET, BLACK, map->EntitysMap[newX][newY]->color, ch, buffer, &bufferPos);
             } else {
-                int random = (int)((sin(newX * (0.5+(newY/5 % 5))) * cos(newY * 0.5+(newX/5 % 5))) * 10);
+                int random = (int)((sin(newX * (0.5 + (newY / 5 % 5))) * cos(newY * 0.5 + (newX / 5 % 5))) * 10);
                 if (!random) {
-                    printPlus(RESET, BLACK_BG, WHITE, "• ");
+                    printPlusAppendToBuffer(RESET, BLACK, WHITE, "• ", buffer, &bufferPos);
                 } else {
-                    printPlus(RESET, BLACK_BG, WHITE, "· ");
+                    printPlusAppendToBuffer(RESET, BLACK, WHITE, "· ", buffer, &bufferPos);
                 }
             }
-            if (x == (map->cameraWidth-1)) {
-                printPlus(BOLD, BLACK_BG, WHITE, "║");
+            if (x == (map->cameraWidth - 1)) {
+                printPlusAppendToBuffer(BOLD, BLACK, WHITE, "║", buffer, &bufferPos);
             }
         }
-        printf("\n");
+        appendToBuffer(buffer, &bufferPos, "\n");
     }
-    for (int line = 0; line < map->cameraWidth+2; ++line) {
+
+    // Bottom border
+    for (int line = 0; line < map->cameraWidth + 2; ++line) {
         if (line == 0) {
-            printPlus(BOLD, BLACK_BG, WHITE, "╚═");
-            continue;
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "╚═", buffer, &bufferPos);
+        } else if (line == map->cameraWidth + 1) {
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "╝", buffer, &bufferPos);
+        } else {
+            printPlusAppendToBuffer(BOLD, BLACK, WHITE, "══", buffer, &bufferPos);
         }
-        if (line == map->cameraWidth+1) {
-            printPlus(BOLD, BLACK_BG, WHITE, "╝");
-            continue;
-        }
-        printPlus(BOLD, BLACK_BG, WHITE, "══");
     }
-    printf("\n");
+    appendToBuffer(buffer, &bufferPos, "\n");
+
+    // Print the entire buffer
+    printf("%s", buffer);
 }
+
 
 Entity* addEntityToWorld(worldMap* map, int x, int y) {
     if (x < 0 || x >= map->width || y < 0 || y >= map->height) {
