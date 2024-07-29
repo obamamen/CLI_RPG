@@ -129,10 +129,12 @@ int main () {
     int cursorY = -1;
 
     while (1) {
+        //printf("a");
+        //continue; 
         if (_kbhit()) {  
             char input = _getch();  
             if (input == 'v') {
-                printf("Size of: %zu\n", sizeof(int*));
+                printf("Size of: %zu\n", sizeof(worldMap));
                 FILE* file = fopen("map.bin", "wb"); 
                 if (file == NULL) {
                     exit(1);
@@ -148,7 +150,7 @@ int main () {
                 system("cls");
                 handleCursorMovement(input, &cursorX, &cursorY);
                 printWorld(world, cursorX, cursorY);
-                Entity* onCursor = world->EntitysMap[cursorX][cursorY];
+                Entity* onCursor = &world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
             }
             if ((input == 'e') && (ui==UI_PLAY_STATE)) {
@@ -157,7 +159,7 @@ int main () {
                 cursorX = world->Player->xPos;
                 cursorY = world->Player->yPos;
                 printWorld(world, world->Player->xPos,world->Player->yPos);
-                Entity* onCursor = world->EntitysMap[cursorX][cursorY];
+                Entity* onCursor = &world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
                 continue;
             }
@@ -172,7 +174,7 @@ int main () {
             if (ui==UI_PLAY_STATE) {
                 system("cls");
                 handleMovementInput(input, world);
-                updateMap(world); 
+                //updateMap(world); 
                 printWorld(world,-1,-1);
             }
             //printf("b: Enemies @  #  X  O  M  &   ☠  ☻  ▒ Cursor >  <  ^  v  *  +  o  .  ←  →  ↑  ↓ UI Elements *  +  -  |  =  .  :  ;  #  √  × +  -  |  ┼  ─  │  ┌  ┐  └  ┘  ╭  ╮  ╰  ╯  ╲  ╱  ╳  ╋  ┃  ━\n"); 

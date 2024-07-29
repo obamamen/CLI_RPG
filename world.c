@@ -26,24 +26,27 @@ void clampCamera(worldMap* map) {
 
 void setupWorld(worldMap* map) {
     int i, j;
-    for (i = 0; i < EntityListSize; i++) {
-        makeEmptyEntity(&map->EntityList[i]);
-    }
-    setupPlayer(&map->EntityList[0]);
-    map->Player = &map->EntityList[0];
+    //for (i = 0; i < EntityListSize; i++) {
+    //    makeEmptyEntity(&map->EntityList[i]);
+    //}
 
     map->width = EntitysMapWidth;
     map->height = EntitysMapHeight;
     for (i = 0; i < EntitysMapWidth; ++i) {
         for (j = 0; j < EntitysMapHeight; ++j) {
-            map->EntitysMap[i][j] = NULL;
+            //map->EntitysMap[i][j] = NULL;
+            makeEmptyEntity(&map->EntitysMap[i][j]);
         }
     }
-    map->EntitysMap[0][0] = &map->EntityList[0];
+
+    setupPlayer(&map->EntitysMap[0][0]);
+    map->Player = &map->EntitysMap[0][0];
+
+    //map->EntitysMap[0][0] = *map->Player;
     map->cameraX = 0;
     map->cameraY = 0;
-    map->cameraWidth = 11;
-    map->cameraHeight = 11;
+    map->cameraWidth = 15;
+    map->cameraHeight = 15;
 }
 
 void updateMap(worldMap* map) {
@@ -84,9 +87,9 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
             int newY = y+map->cameraY;
             if (newX == cursorX && newY == cursorY) {
                 printPlus(BOLD, MAGENTA_BG, YELLOW, "X ");
-            } else if (map->EntitysMap[newX][newY] != NULL) {
-                char ch[3] = { map->EntitysMap[newX][newY]->icon ,' ', '\0'};
-                printPlus(RESET, 0, map->EntitysMap[newX][newY]->color, ch);
+            } else if (map->EntitysMap[newX][newY].type != ENTITYTYPE_EMPTY) {
+                char ch[3] = { map->EntitysMap[newX][newY].icon ,' ', '\0'};
+                printPlus(RESET, 0, map->EntitysMap[newX][newY].color, ch);
             } else {
                 int random = (int)((sin(newX * (0.5+(newY/5 % 5))) * cos(newY * 0.5+(newX/5 % 5))) * 10);
                 if (!random) {
@@ -121,19 +124,19 @@ Entity* addEntityToWorld(worldMap* map, int x, int y) {
         return NULL;
     }
 
-    if (map->EntitysMap[x][y] != NULL) {
+    if (map->EntitysMap[x][y].type != ENTITYTYPE_EMPTY) {
         printf("Error: Position already occupied.\n");
         return NULL;
     }
 
-    for (int i = 0; i < EntityListSize; ++i) {
-        if (map->EntityList[i].type == ENTITYTYPE_EMPTY) {
-            Entity* entity = &map->EntityList[i];
-            makeEmptyEntity(entity);
+    //for (int i = 0; i < EntityListSize; ++i) {
+        //if (map->EntityList[i].type == ENTITYTYPE_EMPTY) {
+            Entity entity;
+            makeEmptyEntity(&entity);
             map->EntitysMap[x][y] = entity;
-            return entity;
-        }
-    }
+            return &map->EntitysMap[x][y];
+        //}
+    //}
 
     printf("Error: No space in entityList.\n");
 }

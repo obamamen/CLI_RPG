@@ -10,13 +10,17 @@ void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
     if (newX < 0 || newX >= map->width || newY < 0 || newY >= map->height) {
         return;
     }
-    if (map->EntitysMap[newX][newY] != NULL) {
+    if (map->EntitysMap[newX][newY].type != ENTITYTYPE_EMPTY) {
         return;
     }
-    map->EntitysMap[entity->xPos][entity->yPos] = NULL;
+    //map->EntitysMap[entity->xPos][entity->yPos] = NULL;
+
+    //map->EntitysMap[newX][newY] = *entity;
+    memcpy(&map->EntitysMap[newX][newY], entity, sizeof(Entity));
+    makeEmptyEntity(&map->EntitysMap[entity->xPos][entity->yPos]);
+    map->Player = &map->EntitysMap[newX][newY];
     entity->xPos = newX;
     entity->yPos = newY;
-    map->EntitysMap[newX][newY] = entity;
 }
 
 void setEntityName(Entity* entity, const char* name) {

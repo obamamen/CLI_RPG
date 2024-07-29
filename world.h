@@ -9,8 +9,7 @@
 #define EntitysMapHeight 32
 
 typedef struct {
-    Entity EntityList[EntityListSize];
-    Entity* EntitysMap[EntitysMapWidth][EntitysMapHeight];
+    Entity EntitysMap[EntitysMapWidth][EntitysMapHeight];
     Entity* Player;
     int width : 16;
     int height : 16;
