@@ -2,7 +2,7 @@
 #define UNITS_H
 #include "color.h"
 
-#define InventoryMaxSize 128
+#define InventoryMaxSize 96
 #define EnchantmentsMaxSize 4
 #define MaxStackSize
 
