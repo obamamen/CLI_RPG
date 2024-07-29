@@ -5,19 +5,19 @@
 #include "ansi.h"
 
 #define EntityListSize 1024
-#define EntitysMapWidth 16
-#define EntitysMapHeight 16
+#define EntitysMapWidth 32
+#define EntitysMapHeight 32
 
 typedef struct {
     Entity EntityList[EntityListSize];
     Entity* EntitysMap[EntitysMapWidth][EntitysMapHeight];
     Entity* Player;
-    int width;
-    int height;
-    int cameraX;
-    int cameraY;
-    int cameraWidth;
-    int cameraHeight;
+    int width : 16;
+    int height : 16;
+    int cameraX : 16;
+    int cameraY : 16;
+    int cameraWidth : 8;
+    int cameraHeight : 8;
 } worldMap;
 
 void createEmptyItem(Item* item);

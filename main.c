@@ -132,9 +132,13 @@ int main () {
         if (_kbhit()) {  
             char input = _getch();  
             if (input == 'v') {
-                printf("state = %d",ui);
-                printf("x = %d",cursorX);
-                printf("y = %d",cursorY);
+                printf("Size of 1 item: %zu\n", sizeof(Item));
+                FILE* file = fopen("map.bin", "wb"); 
+                if (file == NULL) {
+                    exit(1);
+                }
+                fwrite(world, sizeof(worldMap), 1, file);
+                fclose(file);
                 continue;
             }
             if (input == 'q') {
