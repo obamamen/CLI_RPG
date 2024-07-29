@@ -88,7 +88,12 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
                 char ch[3] = { map->EntitysMap[newX][newY]->icon ,' ', '\0'};
                 printPlus(RESET, 0, map->EntitysMap[newX][newY]->color, ch);
             } else {
-                printPlus(RESET, BLACK_BG, WHITE, "· ");
+                int random = (int)((sin(newX * (0.5+(newY/5 % 5))) * cos(newY * 0.5+(newX/5 % 5))) * 10);
+                if (!random) {
+                    printPlus(RESET, BLACK_BG, WHITE, "• ");
+                } else {
+                    printPlus(RESET, BLACK_BG, WHITE, "· ");
+                }
             }
             if (x == (map->cameraWidth-1)) {
                 printPlus(BOLD, BLACK_BG, WHITE, "║");

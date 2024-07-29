@@ -132,7 +132,7 @@ int main () {
         if (_kbhit()) {  
             char input = _getch();  
             if (input == 'v') {
-                printf("Size of 1 item: %zu\n", sizeof(Item));
+                printf("Size of: %zu\n", sizeof(int*));
                 FILE* file = fopen("map.bin", "wb"); 
                 if (file == NULL) {
                     exit(1);
