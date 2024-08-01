@@ -9,7 +9,7 @@
 typedef struct {
     int x;
     int y;
-} pos;
+} Pos;
 
 typedef enum {
     SPELLID_EMPTY,

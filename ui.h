@@ -19,6 +19,7 @@ typedef enum {
 
 void handleMovementInput(char input, worldMap* world);
 void handleCursorMovement(char input, int* cx, int* cy);
+void clampCursorInCamera(worldMap* world, int* cx, int* cy);
 void printEntity(Entity* entity);
 
 

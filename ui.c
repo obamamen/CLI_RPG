@@ -46,6 +46,23 @@ void handleCursorMovement(char input, int* cx, int* cy) {
     }
 }
 
+void clampCursorInCamera(worldMap* world, int* cx, int* cy) {
+    if (*cx < world->cameraX) {
+        *cx = world->cameraX;
+    }
+    if (*cy < world->cameraY) {
+        *cy = world->cameraY;
+    }
+
+    if (*cx > world->cameraX + world->cameraWidth) {
+        *cx = world->cameraX + world->cameraWidth;
+    }
+
+    if (*cy > world->cameraY + world->cameraHeight) {
+        *cy = world->cameraY + world->cameraHeight;
+    }
+}
+
 void printEntity(Entity* entity) {
     if (entity == NULL) {
         return;

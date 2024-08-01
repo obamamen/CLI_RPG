@@ -54,6 +54,44 @@ void printSpellName(Spell* spell) {
     }
 }
 
+Pos SelectXY(worldMap* world) {
+    Pos selectedPos;
+    selectedPos.x = world->Player->xPos;
+    selectedPos.y = world->Player->yPos;
+
+    system("cls");
+    printWorld(world, selectedPos.x, selectedPos.y);
+    printf("\n");
+    printf("(");
+    printf("%d", selectedPos.x);
+    printf(",");
+    printf("%d", selectedPos.y);
+    printf(")");
+
+    while (1) {
+        if (_kbhit()) {  
+            char input = _getch();
+
+            if (input == ' ') {
+                return selectedPos;
+            }
+
+            handleCursorMovement(input, &selectedPos.x, &selectedPos.y);
+            clampCursorInCamera(world, &selectedPos.x, &selectedPos.y);
+            system("cls");
+            printWorld(world, selectedPos.x, selectedPos.y);
+            printf("\n");
+            printf("(");
+            printf("%d", selectedPos.x);
+            printf(",");
+            printf("%d", selectedPos.y);
+            printf(")");
+
+            waitMs(25);
+        }
+    }
+}
+
 
 Spell* selectPlayerSpell(worldMap* world) {
     printPlus(RESET, WHITE, BLACK_BG, "Select a spell:");
@@ -77,7 +115,7 @@ Spell* selectPlayerSpell(worldMap* world) {
             char input = _getch();
 
 
-            if (input == 'd') { 
+            if (input == ' ') {
                 return noEmptySpells[selectedSpell];
             }
             if (input == 'q') { 
@@ -107,7 +145,7 @@ Spell* selectPlayerSpell(worldMap* world) {
                 printSpellName(noEmptySpells[i]);
                 printf("\n");
             }
-
+            waitMs(25);
         }
     }   
 }
@@ -176,6 +214,7 @@ int main () {
                 if (selectedSpell != NULL) {
                     printSpellName(selectedSpell);
                 }
+                SelectXY(world);
             }
             if ((input == 'c') && (ui==UI_CURSOR_STATE)) {
                 ui = UI_PLAY_STATE;
