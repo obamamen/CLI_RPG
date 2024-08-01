@@ -2,7 +2,7 @@
 #define UNITS_H
 #include "color.h"
 
-#define InventoryMaxSize 96
+#define InventoryMaxSize 64
 #define EnchantmentsMaxSize 4
 #define MaxStackSize
 
@@ -11,29 +11,10 @@ typedef struct {
     int y;
 } pos;
 
-
 typedef enum {
-    ITEMNAME_EMPTY
-} ItemName;
-
-typedef enum {
-    ITEMTYPE_EMPTY,
-    ITEMTYPE_SPELL,
-    ITEMTYPE_ARMOUR,
-    ITEMTYPE_WEAPON,
-    ITEMTYPE_AMMUTITION
-} ItemType;
-
-
-typedef enum {
-    ITEMCOLLECTION_EMPTY,
-    ITEMCOLLENTION_SPELL
-} ItemCollection;
-
-typedef enum {
-    SPELL_EMPTY,
-    SPELL_FIREBALL
-} Spell;
+    SPELLID_EMPTY,
+    SPELLID_FIREBALL
+} SpellID;
 
 typedef enum {
     ENCHANTMENT_EMPTY,
@@ -46,7 +27,7 @@ typedef enum {
 } ItemID;
 
 typedef struct {
-    ItemType type;
+    //ItemType type;
     //ItemName name;
     //ItemCollection collection : 8;
     Enchantment enchantments[EnchantmentsMaxSize];
@@ -56,6 +37,11 @@ typedef struct {
     //int maxStack : 16;
     //int weight : 16;
 } Item;
+
+typedef struct {
+    SpellID spellID;
+
+} Spell;
 
 
 typedef enum {
@@ -75,6 +61,7 @@ typedef struct {
     int mana: 16; 
     int maxMana: 16; 
     Item inventory[InventoryMaxSize];
+    Spell spells[InventoryMaxSize];
 
     int xPos : 16;
     int yPos : 16;

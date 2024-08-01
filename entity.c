@@ -47,7 +47,8 @@ void makeEmptyEntity(Entity* entity) {
     entity->color = WHITE;
     setEntityName(entity,"");
     for (int i = 0; i < InventoryMaxSize; i++) {
-        entity->inventory[i].type = ITEMTYPE_EMPTY;
+        entity->spells[i].spellID = SPELLID_EMPTY;
+        //entity->inventory[i].type = 0;
         //entity->inventory[i].name = ITEMNAME_EMPTY;
         //entity->inventory[i].collection = ITEMCOLLECTION_EMPTY;
         for (int j = 0; j < EnchantmentsMaxSize; j++) {

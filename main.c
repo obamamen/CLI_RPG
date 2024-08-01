@@ -46,6 +46,72 @@ void set_code_page_utf8() {
 #endif
 }
 
+void printSpellName(Spell* spell) {
+    switch (spell->spellID) {
+        case SPELLID_FIREBALL:
+            printPlus(RESET, WHITE, BLACK_BG, "Fireball");
+        break;
+    }
+}
+
+
+Spell* selectPlayerSpell(worldMap* world) {
+    printPlus(RESET, WHITE, BLACK_BG, "Select a spell:");
+    printf("\n");
+    printf("\n");
+    printPlus(RESET, WHITE, BLACK_BG, "> ");
+    Spell* noEmptySpells[InventoryMaxSize];
+    int noEmptySpellCount = 0;
+    for (int i = 0; i < InventoryMaxSize; i++) {
+        if (world->Player->spells[i].spellID == SPELLID_EMPTY) {
+            continue;
+        }
+        printSpellName(&world->Player->spells[i]);
+        noEmptySpells[noEmptySpellCount] = &world->Player->spells[i];
+        printf("\n");
+        noEmptySpellCount ++;
+    }
+    int selectedSpell = 0;
+    while (1) {
+        if (_kbhit()) {  
+            char input = _getch();
+
+
+            if (input == 'd') { 
+                return noEmptySpells[selectedSpell];
+            }
+            if (input == 'q') { 
+                return NULL;
+            }
+            if (input == 's') {
+                selectedSpell += 1;
+            }
+            if (input == 'w') {
+                selectedSpell -= 1;
+                if (selectedSpell < 0) {
+                    selectedSpell = 0;
+                }
+            }
+            system("cls");
+            printWorld(world, -1, -1);
+            printPlus(RESET, WHITE, BLACK_BG, "Select a spell:");
+            printf("\n");
+            printf("\n");
+            for (int i = 0; i < noEmptySpellCount; i++) {
+                if (noEmptySpells[i]->spellID == SPELLID_EMPTY) {
+                    continue;
+                }
+                if (i == selectedSpell) {
+                    printf("> ");
+                }
+                printSpellName(noEmptySpells[i]);
+                printf("\n");
+            }
+
+        }
+    }   
+}
+
 
 int main () {
     enable_virtual_terminal_processing(); //otherwise no color in normal cmd
@@ -63,6 +129,12 @@ int main () {
     UIstate ui = UI_PLAY_STATE;
     int cursorX = -1;
     int cursorY = -1;
+    world->Player->spells[0].spellID = SPELLID_FIREBALL;
+    world->Player->spells[1].spellID = SPELLID_FIREBALL;
+    //world->Player->spells[2].spellID = SPELLID_FIREBALL;
+    world->Player->spells[3].spellID = SPELLID_FIREBALL;
+    world->Player->spells[4].spellID = SPELLID_FIREBALL;
+    world->Player->spells[5].spellID = SPELLID_FIREBALL;
 
     while (1) {
         if (_kbhit()) {  
@@ -88,7 +160,7 @@ int main () {
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
             }
-            if ((input == 'e') && (ui==UI_PLAY_STATE)) {
+            if ((input == 'c') && (ui==UI_PLAY_STATE)) {
                 ui = UI_CURSOR_STATE;
                 system("cls");
                 cursorX = world->Player->xPos;
@@ -99,7 +171,13 @@ int main () {
                 printEntity(onCursor);
                 continue;
             }
-            if ((input == 'e') && (ui==UI_CURSOR_STATE)) {
+            if ((input == 'e') && (ui==UI_PLAY_STATE)) {
+                Spell* selectedSpell = selectPlayerSpell(world);
+                if (selectedSpell != NULL) {
+                    printSpellName(selectedSpell);
+                }
+            }
+            if ((input == 'c') && (ui==UI_CURSOR_STATE)) {
                 ui = UI_PLAY_STATE;
                 cursorX = -1;
                 cursorY = -1;
