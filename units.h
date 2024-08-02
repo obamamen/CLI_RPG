@@ -1,6 +1,7 @@
 #ifndef UNITS_H
 #define UNITS_H
 #include "color.h"
+//#include "spell.h"
 
 #define InventoryMaxSize 64
 #define EnchantmentsMaxSize 4
@@ -10,11 +11,6 @@ typedef struct {
     int x;
     int y;
 } Pos;
-
-typedef enum {
-    SPELLID_EMPTY,
-    SPELLID_FIREBALL
-} SpellID;
 
 typedef enum {
     ENCHANTMENT_EMPTY,
@@ -38,9 +34,23 @@ typedef struct {
     //int weight : 16;
 } Item;
 
+typedef enum {
+    SPELLID_EMPTY,
+    SPELLID_FIREBALL,
+    SPELLID_SELFHEAL
+} SpellID;
+
+typedef enum {
+    SPELLTARGETTYPE_NONE,
+    SPELLTARGETTYPE_SELF,
+    SPELLTARGETTYPE_POS,
+    SPELLTARGETTYPE_AREA_3X3,
+    SPELLTARGETTYPE_AREA_CROSS,
+} SpellTargetType;
+
 typedef struct {
     SpellID spellID;
-
+    int manaCost;
 } Spell;
 
 

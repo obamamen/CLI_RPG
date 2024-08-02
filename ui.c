@@ -67,11 +67,12 @@ void printEntity(Entity* entity) {
     if (entity == NULL) {
         return;
     }
-    printPlus(RESET, BLACK_BG, WHITE, " ╭━━━━━━━━═[ STATS ]═━━━━━━━━ \n");
-    printPlus(BOLD, BLACK_BG, WHITE, " ┃  > Type    :  ");
+    printPlus(RESET, BLACK_BG, WHITE, " ╭───────═[ STATS ]═─────── \n");
+    printPlus(RESET, BLACK_BG, WHITE, " |\n");
+    printPlus(RESET, BLACK_BG, WHITE, " |  + Type    :  ");
     printPlus(RESET, BLACK_BG, WHITE,entity->name);
     printPlus(RESET, BLACK_BG, WHITE,"\n");
-    printPlus(RESET, BLACK_BG, WHITE, " ┃  > Health  :  ");
+    printPlus(RESET, BLACK_BG, WHITE, " |  + Health  :  ");
         char str[64];
         snprintf(str, sizeof(str), "%d", entity->health);
         printPlus(RESET, BLACK_BG, WHITE,str);
@@ -79,15 +80,21 @@ void printEntity(Entity* entity) {
         snprintf(str, sizeof(str), "%d", entity->maxHealth);
         printPlus(RESET, BLACK_BG, WHITE,str);
         printPlus(RESET, BLACK_BG, WHITE,"\n");
-    printPlus(RESET, BLACK_BG, WHITE, " ┃  > Mana    :  ");
+    if (entity->maxMana != 0) { 
+    printPlus(RESET, BLACK_BG, WHITE, " |  + Mana    :  ");
         snprintf(str, sizeof(str), "%d", entity->mana);
         printPlus(RESET, BLACK_BG, WHITE,str);
         printPlus(RESET, BLACK_BG, WHITE," / ");
         snprintf(str, sizeof(str), "%d", entity->maxMana);
         printPlus(RESET, BLACK_BG, WHITE,str);
         printPlus(RESET, BLACK_BG, WHITE,"\n");
-    printPlus(RESET, BLACK_BG, WHITE, " ┃  > level   :  ");
+    }
+    if (entity->level != 0) {
+    printPlus(RESET, BLACK_BG, WHITE, " |  + level   :  ");
         snprintf(str, sizeof(str), "%d", entity->level);
         printPlus(RESET, BLACK_BG, WHITE,str);
         printPlus(RESET, BLACK_BG, WHITE,"\n");
+    }
+    printPlus(RESET, BLACK_BG, WHITE, " |\n");
+    printPlus(RESET, BLACK_BG, WHITE, " ╰────────────── \n");
 }

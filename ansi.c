@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
+
 #include "ansi.h"
 
 
@@ -85,7 +87,7 @@ void appendToBuffer(char* buffer, int* bufferPos, const char* text) {
     }
 }
 
-// Print function with simplified logic
+
 void printPlusAppendToBuffer(TextAttribute attr, Color fg, Color bg, const char *text, char* buffer, int* bufferPos) {
     appendToBuffer(buffer, bufferPos, get_attribute_code(attr));    // Text attribute code
     appendToBuffer(buffer, bufferPos, get_color_code(fg));          // Foreground color code
@@ -95,24 +97,24 @@ void printPlusAppendToBuffer(TextAttribute attr, Color fg, Color bg, const char 
 }
 
 void printPlus(TextAttribute attr, Color fg, Color bg, const char *text) {
-    int reset = 0;
-    if (reset == 1) { 
-        printf("%s%s%s%s%s", 
-            get_attribute_code(attr),   
-            get_color_code(fg),         
-            get_color_code(bg),         
-            text,                       
-            get_attribute_code(RESET)   
-        );
-    }
-    if (reset == 0) { 
-        printf("%s%s%s%s", 
-            get_attribute_code(attr),   
-            get_color_code(fg),         
-            get_color_code(bg),         
-            text                      
-        );
-    }
+    printf("%s%s%s%s", 
+        get_attribute_code(attr),   
+        get_color_code(fg),         
+        get_color_code(bg),         
+        text                      
+    );
+}
+
+void printAlignedSpellMana(const char *name, int mana, int nameWidth, int manaWidth, TextAttribute attr, Color fg, Color bg) {
+    char nameBuffer[nameWidth + 1];
+    char manaBuffer[manaWidth + 1];
+
+    snprintf(nameBuffer, sizeof(nameBuffer), "%-*s", nameWidth, name);
+    snprintf(manaBuffer, sizeof(manaBuffer), "%*d", manaWidth, mana);
+
+    printPlus(attr, fg, bg, nameBuffer);
+    printf(" ");
+    printPlus(attr, fg, bg, manaBuffer);
 }
 
 

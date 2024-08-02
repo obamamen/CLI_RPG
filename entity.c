@@ -48,6 +48,7 @@ void makeEmptyEntity(Entity* entity) {
     setEntityName(entity,"");
     for (int i = 0; i < InventoryMaxSize; i++) {
         entity->spells[i].spellID = SPELLID_EMPTY;
+        entity->spells[i].manaCost = 0;
         //entity->inventory[i].type = 0;
         //entity->inventory[i].name = ITEMNAME_EMPTY;
         //entity->inventory[i].collection = ITEMCOLLECTION_EMPTY;

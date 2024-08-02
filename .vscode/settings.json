@@ -61,6 +61,9 @@
     "windows.h": "c",
     "conio.h": "c",
     "units.h": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "color.h": "c",
+    "ansi.h": "c",
+    "stdarg.h": "c"
   }
 }
