@@ -88,6 +88,7 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
             int newY = y + map->cameraY;
             if (newX == cursorX && newY == cursorY) {
                 printPlusAppendToBuffer(BOLD, MAGENTA_BG, YELLOW, "X ", buffer, &bufferPos);
+                printPlusAppendToBuffer(RESET, RESET, RESET, "", buffer, &bufferPos);
             } else if (map->EntitysMap[newX][newY] != NULL) {
                 char ch[4];
                 snprintf(ch, sizeof(ch), "%c ", map->EntitysMap[newX][newY]->icon);

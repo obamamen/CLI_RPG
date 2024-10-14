@@ -11,7 +11,7 @@ void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
         return;
     }
     if (map->EntitysMap[newX][newY] != NULL) {
-        return;
+        return; // if space isnt empty
     }
     map->EntitysMap[entity->xPos][entity->yPos] = NULL;
     entity->xPos = newX;
@@ -20,12 +20,15 @@ void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
 }
 
 void setEntityName(Entity* entity, const char* name) {
-    if (entity == NULL) {
+    if (entity == NULL || name == NULL) {
         return;
     }
+
     if (entity->name != NULL) {
         free(entity->name);
     }
+
+    entity->name = malloc(strlen(name) + 1);
     if (entity->name != NULL) {
         strcpy(entity->name, name); 
     }
@@ -46,33 +49,58 @@ void makeEmptyEntity(Entity* entity) {
     entity->level = 0;
     entity->color = WHITE;
     entity->spellCount = 0;
-    setEntityName(entity,"");
+    entity->inventoryCount = 0;
+    setEntityName(entity,"Empty Entity");
     for (int i = 0; i < InventoryMaxSize; i++) {
         entity->spells = NULL;
-        //entity->spells[i].manaCost = 0;
-        //entity->inventory[i].type = 0;
-        //entity->inventory[i].name = ITEMNAME_EMPTY;
-        //entity->inventory[i].collection = ITEMCOLLECTION_EMPTY;
-        for (int j = 0; j < EnchantmentsMaxSize; j++) {
-            entity->inventory[i].enchantments[j] = ENCHANTMENT_EMPTY;
-        }
-        //entity->inventory[i].spell = SPELL_EMPTY;
-        //entity->inventory[i].manaCost = 0;
-        //entity->inventory[i].stack = 0;
-        //entity->inventory[i].maxStack = 0;
-        //entity->inventory[i].weight = 0;
+        entity->inventory = NULL;
     }
 }
 
+//void addItemToEntity(Entity* entity, Item item) {
+ //   if (entity == NULL) {
+ //       return; 
+ //   }
+ //   if (entity->spellCount >= InventoryMaxSize) {
+ //       return;
+//    }
+ //   entity->spells = realloc(entity->spells, sizeof(Spell) * ++entity->spellCount);
+    // reallocating to ensure memory is efficienttly removed
+
+//    entity->spells[entity->spellCount - 1] = spell;
+//}
+
 void addSpellToEntity(Entity* entity, Spell spell) {
     if (entity == NULL) {
-        return;
+        return; 
     }
     if (entity->spellCount >= InventoryMaxSize) {
         return;
     }
     entity->spells = realloc(entity->spells, sizeof(Spell) * ++entity->spellCount);
-    entity->spells[entity->spellCount - 1] = spell;
+    // reallocating to ensure memory is efficienttly removed
+
+
+    for (int i = entity->spellCount - 1; i > 0; --i) {
+        entity->spells[i] = entity->spells[i - 1];
+    }
+
+    entity->spells[0] = spell;
+}
+
+void removeSpellFromEntity(Entity* entity, int index) {
+    if (entity == NULL || index < 0 || index >= entity->spellCount) {
+        return;  
+    }
+    
+    for (int i = index; i < entity->spellCount - 1; ++i) {
+        entity->spells[i] = entity->spells[i + 1];
+        // when you remove from the middle,
+        // the right side needs to be shifted to the left
+
+    }
+    
+    entity->spells = realloc(entity->spells, sizeof(Spell) * --entity->spellCount);
 }
 
 void setupPlayer(Entity* player) {

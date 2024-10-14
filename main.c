@@ -49,12 +49,14 @@ void set_code_page_utf8() {
 
 void printSpellName(Spell* spell) {
     //char print[20];
+    printf("%s", get_attribute_code(RESET));
     switch (spell->spellID) {
         case SPELLID_FIREBALL:
-            printPlus(RESET, WHITE, BLACK_BG, "Fireball");
+            printf("%-*s", MaxSpellNameLength, "Fireball");
         break;
         case SPELLID_SELFHEAL:
-            printPlus(RESET, WHITE, BLACK_BG, "Heal self");
+            //printf("Self-healing");
+            printf("%-*s", MaxSpellNameLength, "Self-healing");
         break;
     }
     //printPlus(RESET, WHITE, BLACK_BG, &print);
@@ -102,8 +104,7 @@ Pos SelectXY(worldMap* world) {
 Spell* selectPlayerSpell(worldMap* world) {
     void printTopBar() {
         printPlus(RESET, WHITE_HI, BLACK_BG, "  Select a spell:");
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
+        printPlus(RESET, WHITE, BLACK_BG, "\n\n");
         printPlus(RESET, WHITE, BLACK_BG,"  current mana: ");
         char buffer[20];
         sprintf(buffer, "%d", world->Player->mana);
@@ -111,9 +112,8 @@ Spell* selectPlayerSpell(worldMap* world) {
         printPlus(RESET, WHITE, BLACK_BG, " / ");
         sprintf(buffer, "%d", world->Player->maxMana);
         printPlus(RESET, CYAN, BLACK_BG, buffer);
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
+        printPlus(RESET, WHITE, BLACK_BG, "\n\n\n");
+
     }
     void printSpell(Spell* spell) {
         char buffer[20];
@@ -123,8 +123,10 @@ Spell* selectPlayerSpell(worldMap* world) {
         printPlus(RESET, WHITE, BLACK_BG, buffer);
         printPlus(RESET, WHITE, BLACK_BG, "\n");
     }
+    system("cls");
+
     printTopBar();
-    printPlus(RESET, WHITE, BLACK_BG, "> ");
+    printPlus(RESET, WHITE, BLACK_BG, ">  ");
     Spell* noEmptySpells[world->Player->spellCount];
     int noEmptySpellCount = 0;
     for (int i = 0; i < world->Player->spellCount; i++) {
@@ -132,7 +134,7 @@ Spell* selectPlayerSpell(worldMap* world) {
             continue;
         }
         if (i > 0) {
-            printf("  ");
+            printf("   ");
         }
         printSpell(&world->Player->spells[i]);
         noEmptySpells[noEmptySpellCount] = &world->Player->spells[i];
@@ -161,16 +163,16 @@ Spell* selectPlayerSpell(worldMap* world) {
                 }
             }
             system("cls");
-            printWorld(world, -1, -1);
+            //printWorld(world, -1, -1);
             printTopBar();
             for (int i = 0; i < noEmptySpellCount; i++) {
                 if (noEmptySpells[i]->spellID == SPELLID_EMPTY) {
                     continue;
                 }
                 if (i == selectedSpell) {
-                    printf("> ");
+                    printf(">  ");
                 } else {
-                    printf("  ");
+                    printf("   ");
                 }
                 printSpell(noEmptySpells[i]);
             }
@@ -192,24 +194,20 @@ int main () {
     setupSkeleton(addEntityToWorld(world, 5, 5));
     printWorld(world,-1,-1);
 
-    printf("%s%s%s",get_attribute_code(RESET),get_color_code(RED), "woow red");
-
-    //int nameWidth = 20; // Width for the spell name column
-    //int manaWidth = 5;  // Width for the mana column
-
-    //printAlignedSpellMana("Fireball ee", 5, nameWidth, manaWidth, BOLD, WHITE, BLACK_BG);
-    //printf("\n");
-    //printAlignedSpellMana("Fireball", 5, nameWidth, manaWidth, BOLD, WHITE, BLACK_BG);
-
     UIstate ui = UI_PLAY_STATE;
     int cursorX = -1;
     int cursorY = -1;
 
-    Spell spell = {SPELLID_FIREBALL, 10};
-    addSpellToEntity(world->Player, spell);
+    Spell fire = {SPELLID_FIREBALL, 10, SPELLTARGETTYPE_POS};
+    Spell heal = {SPELLID_SELFHEAL, 15,  SPELLTARGETTYPE_SELF};
+    addSpellToEntity(world->Player, fire);
+    addSpellToEntity(world->Player, fire);
+    addSpellToEntity(world->Player, fire);
+    addSpellToEntity(world->Player, fire);
+    addSpellToEntity(world->Player, fire);
+    addSpellToEntity(world->Player, heal);
 
-    Spell spell1 = {SPELLID_SELFHEAL, 10};
-    addSpellToEntity(world->Player, spell1);
+    removeSpellFromEntity(world->Player, 1);
     
 
     while (1) {
@@ -250,10 +248,18 @@ int main () {
             if ((input == 'e') && (ui==UI_PLAY_STATE)) {
                 Spell* selectedSpell = selectPlayerSpell(world);
                 if (selectedSpell != NULL) {
-                    printSpellName(selectedSpell);
-                    Pos XY = SelectXY(world);
+                    Pos XY;
+                    switch (selectedSpell->targetType) {
+                        case SPELLTARGETTYPE_POS:
+                            XY = SelectXY(world);
+                            castSpell(world, selectedSpell, world->Player, world->EntitysMap[XY.x][XY.y]);
+                            break;
+                        
+                        case SPELLTARGETTYPE_SELF:
+                            castSpell(world, selectedSpell, world->Player, NULL);
+                            break;
 
-                    castSpell(world, selectedSpell, world->Player, world->EntitysMap[XY.x][XY.y]);
+                    }
                 }
             }
             if ((input == 'c') && (ui==UI_CURSOR_STATE)) {

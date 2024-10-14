@@ -26,15 +26,13 @@ void castSpell(worldMap* world, Spell* spell, Entity* caster, void* target) {
             {
                 if (caster->mana >= spell->manaCost) {
                     caster->mana -= spell->manaCost;
-                
-
+            
                 Entity* targetEntity = (Entity*)target;
                 if (targetEntity != NULL) {
                     targetEntity->health -= 10;
                     if (targetEntity->health < 0) {
                         targetEntity->health = 0;
                     }
-                    
                 }
 
                 }

@@ -6,6 +6,7 @@
 #define InventoryMaxSize 64
 #define EnchantmentsMaxSize 4
 #define MaxStackSize
+#define MaxSpellNameLength 20
 
 typedef struct {
     int x;
@@ -51,6 +52,7 @@ typedef enum {
 typedef struct {
     SpellID spellID;
     int manaCost;
+    SpellTargetType targetType;
 } Spell;
 
 
@@ -64,20 +66,20 @@ typedef struct {
     EntityType type;
     int level : 8;
     char icon; 
-    char name[32];
+    char *name;
     Color color: 8;
-    int health : 16;  
-    int maxHealth : 16; 
-    int mana: 16; 
-    int maxMana: 16; 
-    Item inventory[InventoryMaxSize];
+    int health;  
+    int maxHealth; 
+    int mana; 
+    int maxMana; 
+    Item *inventory;
     int inventoryCount;
 
     Spell *spells;
     int spellCount;
 
-    int xPos : 16;
-    int yPos : 16;
+    int xPos;
+    int yPos;
 } Entity;
 
 

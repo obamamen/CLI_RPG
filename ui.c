@@ -54,12 +54,12 @@ void clampCursorInCamera(worldMap* world, int* cx, int* cy) {
         *cy = world->cameraY;
     }
 
-    if (*cx > world->cameraX + world->cameraWidth) {
-        *cx = world->cameraX + world->cameraWidth;
+    if (*cx > world->cameraX + world->cameraWidth-1) {
+        *cx = world->cameraX + world->cameraWidth-1;
     }
 
-    if (*cy > world->cameraY + world->cameraHeight) {
-        *cy = world->cameraY + world->cameraHeight;
+    if (*cy > world->cameraY + world->cameraHeight-1) {
+        *cy = world->cameraY + world->cameraHeight-1;
     }
 }
 
