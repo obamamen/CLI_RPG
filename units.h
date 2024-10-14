@@ -71,7 +71,10 @@ typedef struct {
     int mana: 16; 
     int maxMana: 16; 
     Item inventory[InventoryMaxSize];
-    Spell spells[InventoryMaxSize];
+    int inventoryCount;
+
+    Spell *spells;
+    int spellCount;
 
     int xPos : 16;
     int yPos : 16;

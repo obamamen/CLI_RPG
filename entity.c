@@ -45,10 +45,11 @@ void makeEmptyEntity(Entity* entity) {
     entity->maxMana = 0;
     entity->level = 0;
     entity->color = WHITE;
+    entity->spellCount = 0;
     setEntityName(entity,"");
     for (int i = 0; i < InventoryMaxSize; i++) {
-        entity->spells[i].spellID = SPELLID_EMPTY;
-        entity->spells[i].manaCost = 0;
+        entity->spells = NULL;
+        //entity->spells[i].manaCost = 0;
         //entity->inventory[i].type = 0;
         //entity->inventory[i].name = ITEMNAME_EMPTY;
         //entity->inventory[i].collection = ITEMCOLLECTION_EMPTY;
@@ -61,6 +62,17 @@ void makeEmptyEntity(Entity* entity) {
         //entity->inventory[i].maxStack = 0;
         //entity->inventory[i].weight = 0;
     }
+}
+
+void addSpellToEntity(Entity* entity, Spell spell) {
+    if (entity == NULL) {
+        return;
+    }
+    if (entity->spellCount >= InventoryMaxSize) {
+        return;
+    }
+    entity->spells = realloc(entity->spells, sizeof(Spell) * ++entity->spellCount);
+    entity->spells[entity->spellCount - 1] = spell;
 }
 
 void setupPlayer(Entity* player) {

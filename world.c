@@ -42,8 +42,8 @@ void setupWorld(worldMap* map) {
     map->EntitysMap[0][0] = &map->EntityList[0];
     map->cameraX = 0;
     map->cameraY = 0;
-    map->cameraWidth = 45;
-    map->cameraHeight = 25;
+    map->cameraWidth = 31;
+    map->cameraHeight = 31;
 }
 
 void updateMap(worldMap* map) {
@@ -65,7 +65,7 @@ void updateMap(worldMap* map) {
 }
 
 void printWorld(worldMap* map, int cursorX, int cursorY) {
-    char buffer[40000];
+    char buffer[map->cameraWidth*map->cameraHeight*80];
     int bufferPos = 0;
 
     // Top border

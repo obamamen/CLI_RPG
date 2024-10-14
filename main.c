@@ -125,9 +125,9 @@ Spell* selectPlayerSpell(worldMap* world) {
     }
     printTopBar();
     printPlus(RESET, WHITE, BLACK_BG, "> ");
-    Spell* noEmptySpells[InventoryMaxSize];
+    Spell* noEmptySpells[world->Player->spellCount];
     int noEmptySpellCount = 0;
-    for (int i = 0; i < InventoryMaxSize; i++) {
+    for (int i = 0; i < world->Player->spellCount; i++) {
         if (world->Player->spells[i].spellID == SPELLID_EMPTY) {
             continue;
         }
@@ -142,7 +142,7 @@ Spell* selectPlayerSpell(worldMap* world) {
     while (1) {
         if (_kbhit()) {  
             char input = _getch();
-            if (input == 'q') {
+            if (input == 'e') {
                 return NULL;
             }
             if (input == ' ') {
@@ -204,17 +204,13 @@ int main () {
     UIstate ui = UI_PLAY_STATE;
     int cursorX = -1;
     int cursorY = -1;
-    world->Player->spells[0].spellID = SPELLID_FIREBALL;
-    world->Player->spells[1].spellID = SPELLID_FIREBALL;
-    world->Player->spells[3].spellID = SPELLID_FIREBALL;
-    world->Player->spells[4].spellID = SPELLID_FIREBALL;
-    world->Player->spells[5].spellID = SPELLID_SELFHEAL; 
 
-    world->Player->spells[0].manaCost = 12;
-    world->Player->spells[1].manaCost = 10;
-    world->Player->spells[3].manaCost = 5;
-    world->Player->spells[4].manaCost = 10;
-    world->Player->spells[5].manaCost = 5;
+    Spell spell = {SPELLID_FIREBALL, 10};
+    addSpellToEntity(world->Player, spell);
+
+    Spell spell1 = {SPELLID_SELFHEAL, 10};
+    addSpellToEntity(world->Player, spell1);
+    
 
     while (1) {
         if (_kbhit()) {  

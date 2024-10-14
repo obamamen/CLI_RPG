@@ -6,13 +6,22 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "-o", "my_program", "main.c", "ansi.c", "world.c", "entity.c", "ui.c", "spell.c"  //al c files
+                "-o",
+                "my_program",
+                "main.c",
+                "ansi.c",
+                "world.c",
+                "entity.c",
+                "ui.c",
+                "spell.c"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": ["$gcc"],
+            "problemMatcher": [
+                "$gcc"
+            ],
             "detail": "Compile and link C files using gcc"
         }
     ]
