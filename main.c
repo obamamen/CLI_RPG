@@ -127,17 +127,17 @@ Spell* selectPlayerSpell(worldMap* world) {
 
     printTopBar();
     printPlus(RESET, WHITE, BLACK_BG, ">  ");
-    Spell* noEmptySpells[world->Player->spellCount];
+    Spell* noEmptySpells[world->Player->spells.spellCount];
     int noEmptySpellCount = 0;
-    for (int i = 0; i < world->Player->spellCount; i++) {
-        if (world->Player->spells[i].spellID == SPELLID_EMPTY) {
+    for (int i = 0; i < world->Player->spells.spellCount; i++) {
+        if (world->Player->spells.spells[i].spellID == SPELLID_EMPTY) {
             continue;
         }
         if (i > 0) {
             printf("   ");
         }
-        printSpell(&world->Player->spells[i]);
-        noEmptySpells[noEmptySpellCount] = &world->Player->spells[i];
+        printSpell(&world->Player->spells.spells[i]);
+        noEmptySpells[noEmptySpellCount] = &world->Player->spells.spells[i];
         noEmptySpellCount ++;
     }
     int selectedSpell = 0;
@@ -200,14 +200,9 @@ int main () {
 
     Spell fire = {SPELLID_FIREBALL, 10, SPELLTARGETTYPE_POS};
     Spell heal = {SPELLID_SELFHEAL, 15,  SPELLTARGETTYPE_SELF};
-    addSpellToEntity(world->Player, fire);
-    addSpellToEntity(world->Player, fire);
-    addSpellToEntity(world->Player, fire);
-    addSpellToEntity(world->Player, fire);
-    addSpellToEntity(world->Player, fire);
-    addSpellToEntity(world->Player, heal);
+    addSpellToList(&world->Player->spells, fire);
 
-    removeSpellFromEntity(world->Player, 1);
+    removeSpellFromList(&world->Player->spells, 0);
     
 
     while (1) {
@@ -230,7 +225,7 @@ int main () {
                 system("cls");
                 handleCursorMovement(input, &cursorX, &cursorY);
                 printWorld(world, cursorX, cursorY);
-                waitMs(25);
+                waitMs(50);
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
             }
@@ -240,7 +235,7 @@ int main () {
                 cursorX = world->Player->xPos;
                 cursorY = world->Player->yPos;
                 printWorld(world, world->Player->xPos,world->Player->yPos);
-                waitMs(25);
+                waitMs(50);
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
                 printEntity(onCursor);
                 continue;

@@ -13,27 +13,31 @@ typedef struct {
     int y;
 } Pos;
 
+
+
+
+
+// items
+
 typedef enum {
     ENCHANTMENT_EMPTY,
     ENCHANTMENT_MOREDAMAGE
 } Enchantment;
 
 typedef enum {
-    ITEMID_EMPTY,
-    ITEMID_SWORD
-} ItemID;
+    ITEMTYPE_EMPTY,
+    ITEMTYPE_SWORD
+} ItemType;
 
 typedef struct {
-    //ItemType type;
-    //ItemName name;
-    //ItemCollection collection : 8;
-    Enchantment enchantments[EnchantmentsMaxSize];
-    //Spell spell;
-    //int manaCost : 16;
-    //int stack : 16;
-    //int maxStack : 16;
-    //int weight : 16;
+    char *name;
+    ItemType type;
 } Item;
+
+
+
+
+// spells
 
 typedef enum {
     SPELLID_EMPTY,
@@ -55,6 +59,14 @@ typedef struct {
     SpellTargetType targetType;
 } Spell;
 
+typedef struct {
+    Spell *spells;
+    int spellCount;
+} SpellList;
+
+
+
+// entities
 
 typedef enum {
     ENTITYTYPE_EMPTY,
@@ -75,8 +87,7 @@ typedef struct {
     Item *inventory;
     int inventoryCount;
 
-    Spell *spells;
-    int spellCount;
+    SpellList spells;
 
     int xPos;
     int yPos;

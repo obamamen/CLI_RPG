@@ -48,11 +48,11 @@ void makeEmptyEntity(Entity* entity) {
     entity->maxMana = 0;
     entity->level = 0;
     entity->color = WHITE;
-    entity->spellCount = 0;
+    entity->spells.spellCount = 0;
     entity->inventoryCount = 0;
     setEntityName(entity,"Empty Entity");
     for (int i = 0; i < InventoryMaxSize; i++) {
-        entity->spells = NULL;
+        entity->spells.spells = NULL;
         entity->inventory = NULL;
     }
 }
@@ -70,37 +70,33 @@ void makeEmptyEntity(Entity* entity) {
 //    entity->spells[entity->spellCount - 1] = spell;
 //}
 
-void addSpellToEntity(Entity* entity, Spell spell) {
-    if (entity == NULL) {
-        return; 
-    }
-    if (entity->spellCount >= InventoryMaxSize) {
+void addSpellToList(SpellList *spells, Spell spell) {
+    if (spells->spellCount >= InventoryMaxSize) {
         return;
     }
-    entity->spells = realloc(entity->spells, sizeof(Spell) * ++entity->spellCount);
+    spells->spells = realloc(spells->spells, sizeof(Spell) * ++spells->spellCount);
     // reallocating to ensure memory is efficienttly removed
 
 
-    for (int i = entity->spellCount - 1; i > 0; --i) {
-        entity->spells[i] = entity->spells[i - 1];
+    for (int i = spells->spellCount - 1; i > 0; --i) {
+        spells->spells[i] = spells->spells[i - 1];
     }
-
-    entity->spells[0] = spell;
+    spells->spells[0] = spell;
 }
 
-void removeSpellFromEntity(Entity* entity, int index) {
-    if (entity == NULL || index < 0 || index >= entity->spellCount) {
+void removeSpellFromList(SpellList *spells, int index) {
+    if (index < 0 || index >= spells->spellCount) {
         return;  
     }
     
-    for (int i = index; i < entity->spellCount - 1; ++i) {
-        entity->spells[i] = entity->spells[i + 1];
+    for (int i = index; i < spells->spellCount - 1; ++i) {
+        spells->spells[i] = spells->spells[i + 1];
         // when you remove from the middle,
         // the right side needs to be shifted to the left
 
     }
     
-    entity->spells = realloc(entity->spells, sizeof(Spell) * --entity->spellCount);
+    spells->spells = realloc(spells->spells, sizeof(Spell) * --spells->spellCount);
 }
 
 void setupPlayer(Entity* player) {
