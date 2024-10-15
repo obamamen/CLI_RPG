@@ -8,6 +8,8 @@
 #define EntitysMapWidth 64
 #define EntitysMapHeight 64
 
+void waitMs(int milliseconds);
+
 typedef struct {
     Entity EntityList[EntityListSize];
     Entity* EntitysMap[EntitysMapWidth][EntitysMapHeight];

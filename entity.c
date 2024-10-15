@@ -49,26 +49,30 @@ void makeEmptyEntity(Entity* entity) {
     entity->level = 0;
     entity->color = WHITE;
     entity->spells.spellCount = 0;
-    entity->inventoryCount = 0;
+    entity->inventory.itemCount = 0;
     setEntityName(entity,"Empty Entity");
     for (int i = 0; i < InventoryMaxSize; i++) {
         entity->spells.spells = NULL;
-        entity->inventory = NULL;
+        entity->inventory.items = NULL;
     }
 }
 
-//void addItemToEntity(Entity* entity, Item item) {
- //   if (entity == NULL) {
- //       return; 
- //   }
- //   if (entity->spellCount >= InventoryMaxSize) {
- //       return;
-//    }
- //   entity->spells = realloc(entity->spells, sizeof(Spell) * ++entity->spellCount);
-    // reallocating to ensure memory is efficienttly removed
+void addItemToList(ItemList* list, Item item) {
+    if (list == NULL) {
+        return; 
+    }
+    if (list->itemCount >= InventoryMaxSize) {
+       return;
+    }
+    list->items = realloc(list->items, sizeof(Item) * ++list->itemCount);
+    //reallocating to ensure memory is efficienttly removed
 
-//    entity->spells[entity->spellCount - 1] = spell;
-//}
+    for (int i = list->itemCount - 1; i > 0; --i) {
+        list->items[i] = list->items[i - 1];
+    }
+
+    list->items[0] = item;
+}
 
 void addSpellToList(SpellList *spells, Spell spell) {
     if (spells->spellCount >= InventoryMaxSize) {

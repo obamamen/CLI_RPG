@@ -9,14 +9,6 @@
 #include "spell.h"
 #include <time.h>
 
-
-void waitMs(int milliseconds) {
-    struct timespec ts;
-    ts.tv_sec = milliseconds / 1000;
-    ts.tv_nsec = (milliseconds % 1000) * 1000000; 
-    nanosleep(&ts, NULL);
-}
-
 #ifdef _WIN32
     #include <windows.h>
     #endif
@@ -47,140 +39,6 @@ void set_code_page_utf8() {
 #endif
 }
 
-void printSpellName(Spell* spell) {
-    //char print[20];
-    printf("%s", get_attribute_code(RESET));
-    switch (spell->spellID) {
-        case SPELLID_FIREBALL:
-            printf("%-*s", MaxSpellNameLength, "Fireball");
-        break;
-        case SPELLID_SELFHEAL:
-            //printf("Self-healing");
-            printf("%-*s", MaxSpellNameLength, "Self-healing");
-        break;
-    }
-    //printPlus(RESET, WHITE, BLACK_BG, &print);
-}
-
-Pos SelectXY(worldMap* world) {
-    Pos selectedPos;
-    selectedPos.x = world->Player->xPos;
-    selectedPos.y = world->Player->yPos;
-
-    system("cls");
-    printWorld(world, selectedPos.x, selectedPos.y);
-    printf("\n");
-    printf("(");
-    printf("%d", selectedPos.x);
-    printf(",");
-    printf("%d", selectedPos.y);
-    printf(")");
-
-    while (1) {
-        if (_kbhit()) {  
-            char input = _getch();
-
-            if (input == ' ') {
-                return selectedPos;
-            }
-
-            handleCursorMovement(input, &selectedPos.x, &selectedPos.y);
-            clampCursorInCamera(world, &selectedPos.x, &selectedPos.y);
-            system("cls");
-            printWorld(world, selectedPos.x, selectedPos.y);
-            printf("\n");
-            printf("(");
-            printf("%d", selectedPos.x);
-            printf(",");
-            printf("%d", selectedPos.y);
-            printf(")");
-
-            waitMs(25);
-        }
-    }
-}
-
-
-Spell* selectPlayerSpell(worldMap* world) {
-    void printTopBar() {
-        printPlus(RESET, WHITE_HI, BLACK_BG, "  Select a spell:");
-        printPlus(RESET, WHITE, BLACK_BG, "\n\n");
-        printPlus(RESET, WHITE, BLACK_BG,"  current mana: ");
-        char buffer[20];
-        sprintf(buffer, "%d", world->Player->mana);
-        printPlus(RESET, CYAN, BLACK_BG, buffer);
-        printPlus(RESET, WHITE, BLACK_BG, " / ");
-        sprintf(buffer, "%d", world->Player->maxMana);
-        printPlus(RESET, CYAN, BLACK_BG, buffer);
-        printPlus(RESET, WHITE, BLACK_BG, "\n\n\n");
-
-    }
-    void printSpell(Spell* spell) {
-        char buffer[20];
-        sprintf(buffer, "%d", spell->manaCost);
-        printSpellName(spell);
-        printPlus(RESET, CYAN, BLACK_BG,"    mana: ");
-        printPlus(RESET, WHITE, BLACK_BG, buffer);
-        printPlus(RESET, WHITE, BLACK_BG, "\n");
-    }
-    system("cls");
-
-    printTopBar();
-    printPlus(RESET, WHITE, BLACK_BG, ">  ");
-    Spell* noEmptySpells[world->Player->spells.spellCount];
-    int noEmptySpellCount = 0;
-    for (int i = 0; i < world->Player->spells.spellCount; i++) {
-        if (world->Player->spells.spells[i].spellID == SPELLID_EMPTY) {
-            continue;
-        }
-        if (i > 0) {
-            printf("   ");
-        }
-        printSpell(&world->Player->spells.spells[i]);
-        noEmptySpells[noEmptySpellCount] = &world->Player->spells.spells[i];
-        noEmptySpellCount ++;
-    }
-    int selectedSpell = 0;
-    while (1) {
-        if (_kbhit()) {  
-            char input = _getch();
-            if (input == 'e') {
-                return NULL;
-            }
-            if (input == ' ') {
-                return noEmptySpells[selectedSpell];
-            }
-            if (input == 's') {
-                selectedSpell += 1;
-                if (selectedSpell >= noEmptySpellCount) {
-                    selectedSpell = noEmptySpellCount - 1;
-                }
-            }
-            if (input == 'w') {
-                selectedSpell -= 1;
-                if (selectedSpell < 0) {
-                    selectedSpell = 0;
-                }
-            }
-            system("cls");
-            //printWorld(world, -1, -1);
-            printTopBar();
-            for (int i = 0; i < noEmptySpellCount; i++) {
-                if (noEmptySpells[i]->spellID == SPELLID_EMPTY) {
-                    continue;
-                }
-                if (i == selectedSpell) {
-                    printf(">  ");
-                } else {
-                    printf("   ");
-                }
-                printSpell(noEmptySpells[i]);
-            }
-            waitMs(25);
-        }
-    }   
-}
-
 
 int main () {
     enable_virtual_terminal_processing(); //otherwise no color in normal cmd
@@ -200,12 +58,27 @@ int main () {
 
     Spell fire = {SPELLID_FIREBALL, 10, SPELLTARGETTYPE_POS};
     Spell heal = {SPELLID_SELFHEAL, 15,  SPELLTARGETTYPE_SELF};
+
+    addSpellToList(&world->Player->spells, heal);
+    addSpellToList(&world->Player->spells, fire);
+    addSpellToList(&world->Player->spells, fire);
+    addSpellToList(&world->Player->spells, heal);
+    addSpellToList(&world->Player->spells, fire);
     addSpellToList(&world->Player->spells, fire);
 
-    removeSpellFromList(&world->Player->spells, 0);
+    Item item = {"Baller", ITEMTYPE_SWORD};
+    addItemToList(&world->Player->inventory, item);
+    addItemToList(&world->Player->inventory, item);
+    Item item2 = {"Baller2", ITEMTYPE_SWORD};
+    addItemToList(&world->Player->inventory, item2);
+    addItemToList(&world->Player->inventory, item2);
+    printf("%s", world->Player->inventory.items[0].name);
+
+ 
     
 
     while (1) {
+        waitMs(5);
         if (_kbhit()) {  
             char input = _getch();  
             if (input == 'v') {
@@ -224,6 +97,7 @@ int main () {
             if (ui==UI_CURSOR_STATE) {
                 system("cls");
                 handleCursorMovement(input, &cursorX, &cursorY);
+                clampCursorInCamera(world, &cursorX, &cursorY);
                 printWorld(world, cursorX, cursorY);
                 waitMs(50);
                 Entity* onCursor = world->EntitysMap[cursorX][cursorY];
@@ -256,6 +130,10 @@ int main () {
 
                     }
                 }
+            }
+            if ((input == 'f') && (ui==UI_PLAY_STATE)) {
+                Item* selectedItem = selectPlayerItem(world);
+
             }
             if ((input == 'c') && (ui==UI_CURSOR_STATE)) {
                 ui = UI_PLAY_STATE;

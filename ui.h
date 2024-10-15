@@ -22,6 +22,11 @@ void handleCursorMovement(char input, int* cx, int* cy);
 void clampCursorInCamera(worldMap* world, int* cx, int* cy);
 void printEntity(Entity* entity);
 
+void printSpellName(Spell* spell);
+Spell* selectPlayerSpell(worldMap* world);
+Item* selectPlayerItem(worldMap* world);
+Pos SelectXY(worldMap* world);
+
 
 
 #endif // UI_H

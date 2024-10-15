@@ -34,6 +34,10 @@ typedef struct {
     ItemType type;
 } Item;
 
+typedef struct {
+    Item *items;
+    int itemCount;
+} ItemList;
 
 
 
@@ -84,9 +88,8 @@ typedef struct {
     int maxHealth; 
     int mana; 
     int maxMana; 
-    Item *inventory;
-    int inventoryCount;
 
+    ItemList inventory;
     SpellList spells;
 
     int xPos;

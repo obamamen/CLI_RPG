@@ -3,6 +3,14 @@
 #include <string.h>
 #include <math.h>
 #include "entity.h"
+#include <time.h>
+
+void waitMs(int milliseconds) {
+    struct timespec ts;
+    ts.tv_sec = milliseconds / 1000;
+    ts.tv_nsec = (milliseconds % 1000) * 1000000; 
+    nanosleep(&ts, NULL);
+}
 
 void createEmptyItem(Item* item){
     
