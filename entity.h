@@ -14,8 +14,10 @@ void addSpellToList(SpellList *spells, Spell spell);
 void removeSpellFromList(SpellList *spells, int index);
 
 void addItemToList(ItemList* list, Item item);
+void removeItemFromList(ItemList* list, int index);
 
 void setupSkeleton(Entity* skeleton);
+void freeEntity(Entity* entity);
 
 #endif // ENTITY_H
 

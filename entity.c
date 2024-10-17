@@ -10,13 +10,15 @@ void moveEntity(Entity* entity, int dx, int dy, worldMap* map) {
     if (newX < 0 || newX >= map->width || newY < 0 || newY >= map->height) {
         return;
     }
-    if (map->EntitysMap[newX][newY] != NULL) {
+    if (map->entityMap[newX][newY] != NONE) {
         return; // if space isnt empty
     }
-    map->EntitysMap[entity->xPos][entity->yPos] = NULL;
+    
+    map->entityMap[newX][newY] = map->entityMap[entity->xPos][entity->yPos];
+    map->entityMap[entity->xPos][entity->yPos] = NONE;
     entity->xPos = newX;
     entity->yPos = newY;
-    map->EntitysMap[newX][newY] = entity;
+
 }
 
 void setEntityName(Entity* entity, const char* name) {
@@ -58,9 +60,6 @@ void makeEmptyEntity(Entity* entity) {
 }
 
 void addItemToList(ItemList* list, Item item) {
-    if (list == NULL) {
-        return; 
-    }
     if (list->itemCount >= InventoryMaxSize) {
        return;
     }
@@ -72,6 +71,20 @@ void addItemToList(ItemList* list, Item item) {
     }
 
     list->items[0] = item;
+}
+
+void removeItemFromList(ItemList* list, int index) {
+    if (index < 0 || index >= list->itemCount) {
+        return;  
+    }
+
+    for (int i = index; i < list->itemCount - 1; ++i) {
+        list->items[i] = list->items[i + 1];
+        // when you remove from the middle,
+        // the right side needs to be shifted to the left
+    }
+    
+    list->items = realloc(list->items, sizeof(Spell) * --list->itemCount);
 }
 
 void addSpellToList(SpellList *spells, Spell spell) {
@@ -131,4 +144,29 @@ void setupSkeleton(Entity* skeleton) {
     skeleton->maxMana= 0; 
     skeleton->level = 1;
     skeleton->color = RED;
+}
+
+void freeItem(Item* item) {
+    free(item->name);
+    item->name = NULL;
+}
+
+void freeSpell(Spell* spell) {
+    return;
+}
+
+void freeEntity(Entity* entity) {
+    if (entity == NULL) {
+        return;
+    }
+
+    free(entity->name);
+    free(entity->spells.spells);
+    free(entity->inventory.items);
+
+    for (int i = 0; i < entity->inventory.itemCount; i++) {
+        freeItem(&entity->inventory.items[i]);
+    }
+    entity->inventory.items = NULL;
+    entity->spells.spells = NULL;
 }

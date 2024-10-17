@@ -1,9 +1,11 @@
 #include "world.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <math.h>
 #include "entity.h"
-#include <time.h>
+
 
 void waitMs(int milliseconds) {
     struct timespec ts;
@@ -14,6 +16,56 @@ void waitMs(int milliseconds) {
 
 void createEmptyItem(Item* item){
     
+}
+
+void addEntityToList(EntityList* list, Entity entity) {
+    if (list == NULL) { return; } // if list
+
+    list->entityCount ++; 
+    list->entities = realloc(list->entities, sizeof(Entity)*list->entityCount+1);
+    
+
+    list->entities[list->entityCount-1] = entity;
+}
+
+void setupWorld(worldMap* map) {
+    int i, j;
+    for (i = 0; i < EntityListSize; i++) {
+        makeEmptyEntity(&map->EntityList[i]);
+    }
+    setupPlayer(&map->EntityList[0]);
+    
+
+    map->width = EntitysMapWidth;
+    map->height = EntitysMapHeight;
+    for (i = 0; i < EntitysMapWidth; ++i) {
+        for (j = 0; j < EntitysMapHeight; ++j) {
+            map->EntitysMap[i][j] = NULL;
+        }
+    }
+
+    map->entityList.entities = malloc(sizeof(Entity));
+    map->entityList.entityCount = 1;
+    makeEmptyEntity(&map->entityList.entities[0]);
+    setupPlayer(&map->entityList.entities[0]);
+    map->Player = &map->entityList.entities[0];
+    for (i = 0; i < EntitysMapWidth; ++i) {
+        for (j = 0; j < EntitysMapHeight; ++j) {
+            map->entityMap[i][j] = NONE;
+        }
+    }
+
+
+    map->entityMap[0][0] = 0;
+    map->cameraX = 0;
+    map->cameraY = 0;
+    map->cameraWidth = 31;
+    map->cameraHeight = 31;
+}
+
+void freeWorld(worldMap* map) {
+    free(map->entityList.entities);
+    free(map->Player);
 }
 
 void clampCamera(worldMap* map) {
@@ -30,28 +82,6 @@ void clampCamera(worldMap* map) {
         map->cameraY = map->height - map->cameraHeight;
     }
     
-}
-
-void setupWorld(worldMap* map) {
-    int i, j;
-    for (i = 0; i < EntityListSize; i++) {
-        makeEmptyEntity(&map->EntityList[i]);
-    }
-    setupPlayer(&map->EntityList[0]);
-    map->Player = &map->EntityList[0];
-
-    map->width = EntitysMapWidth;
-    map->height = EntitysMapHeight;
-    for (i = 0; i < EntitysMapWidth; ++i) {
-        for (j = 0; j < EntitysMapHeight; ++j) {
-            map->EntitysMap[i][j] = NULL;
-        }
-    }
-    map->EntitysMap[0][0] = &map->EntityList[0];
-    map->cameraX = 0;
-    map->cameraY = 0;
-    map->cameraWidth = 31;
-    map->cameraHeight = 31;
 }
 
 void updateMap(worldMap* map) {
@@ -97,10 +127,13 @@ void printWorld(worldMap* map, int cursorX, int cursorY) {
             if (newX == cursorX && newY == cursorY) {
                 printPlusAppendToBuffer(BOLD, MAGENTA_BG, YELLOW, "X ", buffer, &bufferPos);
                 printPlusAppendToBuffer(RESET, RESET, RESET, "", buffer, &bufferPos);
-            } else if (map->EntitysMap[newX][newY] != NULL) {
+            } else if (map->entityMap[newX][newY] != NONE) {
                 char ch[4];
-                snprintf(ch, sizeof(ch), "%c ", map->EntitysMap[newX][newY]->icon);
-                printPlusAppendToBuffer(RESET, BLACK, map->EntitysMap[newX][newY]->color, ch, buffer, &bufferPos);
+                if ((map->entityMap[newX][newY] >= 0) && (map->entityMap[newX][newY] < map->entityList.entityCount)) {
+                    int index = map->entityMap[newX][newY];
+                    snprintf(ch, sizeof(ch), "%c ", map->entityList.entities[index].icon);
+                    printPlusAppendToBuffer(RESET, BLACK, map->entityList.entities[index].color, ch, buffer, &bufferPos);
+                }
             } else {
                 int random = (int)((sin(newX * (0.5 + (newY / 5 % 5))) * cos(newY * 0.5 + (newX / 5 % 5))) * 10);
                 if (!random) {
@@ -148,10 +181,11 @@ Entity* addEntityToWorld(worldMap* map, int x, int y) {
         if (map->EntityList[i].type == ENTITYTYPE_EMPTY) {
             Entity* entity = &map->EntityList[i];
             makeEmptyEntity(entity);
+            //addEntityToList(map->entityList, x, y);
             map->EntitysMap[x][y] = entity;
             return entity;
         }
     }
 
-    printf("Error: No space in entityList.\n");
+
 }

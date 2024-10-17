@@ -65,6 +65,8 @@
     "color.h": "c",
     "ansi.h": "c",
     "stdarg.h": "c",
-    "ui.h": "c"
+    "ui.h": "c",
+    "string.h": "c",
+    "world.h": "c"
   }
 }

@@ -1,0 +1,3 @@
+Removing of entities from the worldMap is not possible yet
+    - Wehn you remove entiies from the worldMap in the standard way the indexes get messed up
+        + solution: idk bro
