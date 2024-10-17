@@ -8,6 +8,8 @@
 #define MaxStackSize
 #define MaxSpellNameLength 20
 
+#define NONE -1
+
 typedef struct {
     int x;
     int y;

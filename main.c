@@ -49,7 +49,10 @@ int main () {
         return 1;
     }
     setupWorld(world);
-    setupSkeleton(addEntityToWorld(world, 5, 5));
+    Entity entity;
+    setupSkeleton(&entity);
+    addEntityToList(&world->entityList, entity);
+    world->entityMap[2][2] = 1;
     printWorld(world,-1,-1);
 
     UIstate ui = UI_PLAY_STATE;
@@ -72,10 +75,10 @@ int main () {
     Item item2 = {"Baller2", ITEMTYPE_SWORD};
     addItemToList(&world->Player->inventory, item2);
     addItemToList(&world->Player->inventory, item2);
-    printf("%s", world->Player->inventory.items[0].name);
+
+
 
  
-    
 
     while (1) {
         waitMs(5);

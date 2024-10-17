@@ -11,8 +11,18 @@
 void waitMs(int milliseconds);
 
 typedef struct {
+    Entity *entities;
+    int entityCount;
+} EntityList;
+
+typedef struct {
     Entity EntityList[EntityListSize];
     Entity* EntitysMap[EntitysMapWidth][EntitysMapHeight];
+
+    EntityList entityList;
+    int entityMap[EntitysMapWidth][EntitysMapHeight];
+
+
     Entity* Player;
     int width : 16;
     int height : 16;
@@ -21,6 +31,9 @@ typedef struct {
     int cameraWidth : 8;
     int cameraHeight : 8;
 } worldMap;
+
+void freeWorld(worldMap* map);
+void addEntityToList(EntityList* list, Entity entity);
 
 void createEmptyItem(Item* item);
 void updateMap(worldMap* map);
